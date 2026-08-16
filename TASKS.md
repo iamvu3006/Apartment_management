@@ -44,4 +44,12 @@
   - [x] **District Input**: Đổi nhãn thành `District`, sử dụng Dropdown select chứa danh sách Quận/Phường tại Đà Nẵng.
   - [x] **Property Type Input**: Sử dụng Dropdown select cố định 4 option: `Studio`, `1-Bedroom Apartment`, `2-Bedroom Apartment`, `Penthouse`.
   - [x] **Bộ Lọc Giá Thuê Mới**: Cập nhật khoảng giá 7tr-10tr, 10tr-13tr, 13tr-15tr, 15tr-20tr, >20tr.
-  - [x] **Custom Min/Max Price**: Bổ sung tính năng cho khách hàng tự nhập khoảng giá Tối thiểu (Min) và Tối đa (Max).
+  - [x] **Custom Min/Max Price**: Bổ sung tính năng cho khách hàng tự nhập khoảng giá Tối thiểu (Min) và Tối đa (Max) tự động chèn dấu chấm.
+
+- [ ] **Task 9: Các Tính Năng Nâng Cấp Học Hỏi Từ RentNow.vn (Smart Rental Platform)**
+  - [ ] **1. Chuyển Đổi Tiền Tệ Tự Động (VND ⇄ USD Switcher)**: Nút chọn hiển thị giá VND (₫) hoặc quy đổi USD ($) ở Header/Card cho khách Tây & Expat.
+  - [ ] **2. Danh Sách Yêu Thích / Lưu Phòng (`/saved` - Favorites List)**: Nút thả tim ❤️ lưu phòng ưa thích lưu trên LocalStorage / Cookie để khách tiện so sánh.
+  - [ ] **3. Thông Tin Ngõ/Đường & Cảnh Báo Ngập (Street Access & Flood Warning)**: Thêm trường thông tin độ rộng đường vào (Đường lớn 7.5m, Kiệt ô tô, Kiệt xe máy) và Tình trạng ngập bão (Khu vực cao ráo không ngập).
+  - [ ] **4. Bộ Lọc Tiện Ích Nhanh (Amenity Filters)**: Lọc theo Cho nuôi thú cưng (Pet friendly), Có ban công (Balcony), Thang máy (Elevator), Đỗ ô tô (Car parking).
+  - [ ] **5. Badge Xác Thực Ảnh Thật 100% (100% Verified Real Photos)**: Gắn nhãn uy tín trên từng bài đăng khẳng định thông tin & ảnh thực tế.
+  - [ ] **6. Bản Đồ Tương Tác Căn Hộ Với Pin Giá (Interactive Map View)**: Tích hợp Google Maps / Mapbox hiển thị pin giá tiền từng căn hộ trên bản đồ Đà Nẵng.
