@@ -5,7 +5,9 @@ import Link from "next/link";
 import { supabase } from "@/lib/supabase";
 import { Room, STATUS_LABELS, STATUS_COLORS } from "@/types/room";
 import RoomFilter, { FilterState } from "@/components/RoomFilter";
+import RoomMap from "@/components/RoomMap";
 import { CONTACT_CONFIG } from "@/config/contact";
+import { useApp } from "@/context/AppContext";
 
 const initialFilters: FilterState = {
   search: "",
@@ -21,6 +23,9 @@ export default function HomePage() {
   const [rooms, setRooms] = useState<Room[]>([]);
   const [loading, setLoading] = useState(true);
   const [filters, setFilters] = useState<FilterState>(initialFilters);
+  const [viewMode, setViewMode] = useState<"grid" | "map">("grid");
+
+  const { currency, toggleCurrency, formatPrice, isFavorite, toggleFavorite, favorites } = useApp();
 
   useEffect(() => {
     async function fetchRooms() {
@@ -128,54 +133,34 @@ export default function HomePage() {
             </div>
           </Link>
 
-          <div className="flex items-center gap-3 sm:gap-5">
-            <div className="hidden md:flex items-center gap-4 text-xs">
-              <a
-                href={`tel:${CONTACT_CONFIG.primary.phone}`}
-                className="flex items-center gap-1.5 text-slate-300 hover:text-white font-medium transition"
-              >
-                <svg
-                  className="w-3.5 h-3.5 text-sky-400"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"
-                  />
-                </svg>
-                <span>Vu: {CONTACT_CONFIG.primary.displayPhone}</span>
-              </a>
+          <div className="flex items-center gap-2.5 sm:gap-4">
+            {/* Currency Switcher Button */}
+            <button
+              onClick={toggleCurrency}
+              className="flex items-center gap-1 text-xs bg-slate-800 hover:bg-slate-700 text-slate-200 px-3 py-1.5 rounded-lg border border-slate-700 font-bold transition"
+              title="Toggle currency between VND and USD"
+            >
+              <span>{currency === "VND" ? "🇻🇳 ₫ VND" : "🇺🇸 $ USD"}</span>
+            </button>
 
-              <a
-                href={`tel:${CONTACT_CONFIG.secondary.phone}`}
-                className="flex items-center gap-1.5 text-slate-300 hover:text-white font-medium transition"
-              >
-                <svg
-                  className="w-3.5 h-3.5 text-emerald-400"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"
-                  />
-                </svg>
-                <span>Han My: {CONTACT_CONFIG.secondary.displayPhone}</span>
-              </a>
-            </div>
+            {/* Saved Favorites Link */}
+            <Link
+              href="/saved"
+              className="relative text-xs bg-slate-800 hover:bg-slate-700 text-slate-200 px-3 py-1.5 rounded-lg border border-slate-700 font-semibold transition flex items-center gap-1"
+            >
+              <span>❤️ Saved</span>
+              {favorites.length > 0 && (
+                <span className="w-4 h-4 bg-rose-500 text-white text-[10px] font-extrabold rounded-full flex items-center justify-center">
+                  {favorites.length}
+                </span>
+              )}
+            </Link>
 
             <Link
               href="/admin"
-              className="text-xs bg-slate-800 hover:bg-slate-700 text-slate-200 hover:text-white px-3.5 py-1.5 rounded-lg border border-slate-700 font-medium transition"
+              className="text-xs bg-sky-600 hover:bg-sky-500 text-white px-3.5 py-1.5 rounded-lg font-bold transition shadow-sm"
             >
-              Admin Portal
+              Admin
             </Link>
           </div>
         </div>
@@ -312,7 +297,7 @@ export default function HomePage() {
           </div>
         )}
 
-        {/* Property Grid */}
+        {/* Controls: Mode Switcher (Grid View | Map View) */}
         {!loading && filteredRooms.length > 0 && (
           <>
             <div className="flex items-center justify-between mb-4">
@@ -323,110 +308,162 @@ export default function HomePage() {
                 </span>{" "}
                 available properties
               </p>
+
+              {/* Grid / Map Toggle Buttons */}
+              <div className="flex items-center bg-slate-200 p-1 rounded-xl">
+                <button
+                  onClick={() => setViewMode("grid")}
+                  className={`px-3 py-1.5 rounded-lg text-xs font-bold transition ${
+                    viewMode === "grid"
+                      ? "bg-white text-slate-900 shadow-sm"
+                      : "text-slate-600 hover:text-slate-900"
+                  }`}
+                >
+                  📋 Grid View
+                </button>
+                <button
+                  onClick={() => setViewMode("map")}
+                  className={`px-3 py-1.5 rounded-lg text-xs font-bold transition ${
+                    viewMode === "map"
+                      ? "bg-sky-600 text-white shadow-sm"
+                      : "text-slate-600 hover:text-slate-900"
+                  }`}
+                >
+                  🗺️ Map View
+                </button>
+              </div>
             </div>
 
+            {/* View Mode: MAP */}
+            {viewMode === "map" && (
+              <div className="mb-8">
+                <RoomMap rooms={filteredRooms} />
+              </div>
+            )}
+
+            {/* View Mode: GRID */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {filteredRooms.map((room) => (
-                <Link
-                  key={room.id}
-                  href={`/phong/${room.id}`}
-                  className="bg-white border border-slate-200/80 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl hover:-translate-y-1 transition duration-250 flex flex-col group"
-                >
-                  {/* Thumbnail Image Container */}
-                  <div className="relative aspect-[4/3] bg-slate-100 overflow-hidden">
-                    {room.images[0] ? (
-                      // eslint-disable-next-line @next/next/no-img-element
-                      <img
-                        src={room.images[0]}
-                        alt={room.title}
-                        className="w-full h-full object-cover group-hover:scale-105 transition duration-500 ease-out"
-                      />
-                    ) : (
-                      <div className="w-full h-full flex items-center justify-center text-slate-400 text-xs font-medium">
-                        No photos available
-                      </div>
-                    )}
+              {filteredRooms.map((room) => {
+                const isFav = isFavorite(room.id);
+                return (
+                  <div
+                    key={room.id}
+                    className="bg-white border border-slate-200/80 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl hover:-translate-y-1 transition duration-250 flex flex-col group relative"
+                  >
+                    {/* Thumbnail Image Container */}
+                    <div className="relative aspect-[4/3] bg-slate-100 overflow-hidden">
+                      {room.images[0] ? (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img
+                          src={room.images[0]}
+                          alt={room.title}
+                          className="w-full h-full object-cover group-hover:scale-105 transition duration-500 ease-out"
+                        />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center text-slate-400 text-xs font-medium">
+                          No photos available
+                        </div>
+                      )}
 
-                    {/* Status Badge */}
-                    <div className="absolute top-3 left-3">
-                      <span
-                        className={`text-[11px] px-2.5 py-1 rounded-lg backdrop-blur-md shadow-sm font-semibold ${STATUS_COLORS[room.status]}`}
-                      >
-                        {STATUS_LABELS[room.status]}
-                      </span>
-                    </div>
-
-                    {/* Specs Pill */}
-                    <div className="absolute bottom-3 right-3 bg-slate-900/75 text-white text-[11px] px-2.5 py-1 rounded-lg backdrop-blur-md font-medium">
-                      {room.area} m²
-                    </div>
-                  </div>
-
-                  {/* Card Content */}
-                  <div className="p-4 sm:p-5 flex-1 flex flex-col justify-between space-y-3">
-                    <div>
-                      {/* Sub-header: District & Property Type */}
-                      <div className="flex items-center gap-2 text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">
-                        <span>{room.district}</span>
-                        {room.room_type && (
-                          <>
-                            <span>•</span>
-                            <span className="text-sky-600">{room.room_type}</span>
-                          </>
-                        )}
-                      </div>
-
-                      {/* Title */}
-                      <h3 className="font-bold text-slate-900 text-base group-hover:text-sky-600 transition line-clamp-2 leading-snug">
-                        {room.title}
-                      </h3>
-
-                      {/* Address */}
-                      <p className="text-xs text-slate-500 mt-1.5 flex items-center gap-1 truncate">
-                        <svg
-                          className="w-3.5 h-3.5 text-slate-400 flex-shrink-0"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
+                      {/* Status Badge */}
+                      <div className="absolute top-3 left-3">
+                        <span
+                          className={`text-[11px] px-2.5 py-1 rounded-lg backdrop-blur-md shadow-sm font-semibold ${STATUS_COLORS[room.status]}`}
                         >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
-                          />
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
-                          />
-                        </svg>
-                        <span className="truncate">{room.address}</span>
-                      </p>
-                    </div>
-
-                    {/* Price & CTA */}
-                    <div className="pt-3 border-t border-slate-100 flex items-center justify-between">
-                      <div>
-                        <span className="text-[10px] text-slate-400 font-medium block uppercase tracking-wider">
-                          Monthly Rent
-                        </span>
-                        <span className="text-base sm:text-lg font-extrabold text-rose-600">
-                          {room.price.toLocaleString("vi-VN")} VND
-                          <span className="text-xs font-normal text-slate-500">
-                            /mo
-                          </span>
+                          {STATUS_LABELS[room.status]}
                         </span>
                       </div>
 
-                      <span className="text-xs text-sky-600 group-hover:text-sky-700 font-bold flex items-center gap-1 group-hover:translate-x-0.5 transition">
-                        View Details →
-                      </span>
+                      {/* Favorite Heart Button */}
+                      <button
+                        onClick={(e) => {
+                          e.preventDefault();
+                          toggleFavorite(room.id);
+                        }}
+                        className={`absolute top-3 right-3 w-8 h-8 rounded-full flex items-center justify-center backdrop-blur-md shadow transition ${
+                          isFav
+                            ? "bg-rose-500 text-white scale-110"
+                            : "bg-slate-900/60 hover:bg-slate-900/80 text-white/80"
+                        }`}
+                        title={isFav ? "Remove from saved" : "Save to favorites"}
+                      >
+                        ❤️
+                      </button>
+
+                      {/* Specs Pill */}
+                      <div className="absolute bottom-3 right-3 bg-slate-900/75 text-white text-[11px] px-2.5 py-1 rounded-lg backdrop-blur-md font-medium">
+                        {room.area} m²
+                      </div>
+                    </div>
+
+                    {/* Card Content */}
+                    <div className="p-4 sm:p-5 flex-1 flex flex-col justify-between space-y-3">
+                      <div>
+                        {/* Sub-header: District & Property Type */}
+                        <div className="flex items-center gap-2 text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">
+                          <span>{room.district}</span>
+                          {room.room_type && (
+                            <>
+                              <span>•</span>
+                              <span className="text-sky-600">{room.room_type}</span>
+                            </>
+                          )}
+                        </div>
+
+                        {/* Title */}
+                        <Link href={`/phong/${room.id}`}>
+                          <h3 className="font-bold text-slate-900 text-base group-hover:text-sky-600 transition line-clamp-2 leading-snug">
+                            {room.title}
+                          </h3>
+                        </Link>
+
+                        {/* Address */}
+                        <p className="text-xs text-slate-500 mt-1.5 flex items-center gap-1 truncate">
+                          <svg
+                            className="w-3.5 h-3.5 text-slate-400 flex-shrink-0"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
+                            />
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
+                            />
+                          </svg>
+                          <span className="truncate">{room.address}</span>
+                        </p>
+                      </div>
+
+                      {/* Price & CTA */}
+                      <div className="pt-3 border-t border-slate-100 flex items-center justify-between">
+                        <div>
+                          <span className="text-[10px] text-slate-400 font-medium block uppercase tracking-wider">
+                            Monthly Rent
+                          </span>
+                          <span className="text-base sm:text-lg font-extrabold text-rose-600">
+                            {formatPrice(room.price, "/mo")}
+                          </span>
+                        </div>
+
+                        <Link
+                          href={`/phong/${room.id}`}
+                          className="text-xs text-sky-600 group-hover:text-sky-700 font-bold flex items-center gap-1 group-hover:translate-x-0.5 transition"
+                        >
+                          View Details →
+                        </Link>
+                      </div>
                     </div>
                   </div>
-                </Link>
-              ))}
+                );
+              })}
             </div>
           </>
         )}

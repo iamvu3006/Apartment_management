@@ -46,7 +46,7 @@
   - [x] **Bộ Lọc Giá Thuê Mới**: Cập nhật khoảng giá 7tr-10tr, 10tr-13tr, 13tr-15tr, 15tr-20tr, >20tr.
   - [x] **Custom Min/Max Price**: Bổ sung tính năng cho khách hàng tự nhập khoảng giá Tối thiểu (Min) và Tối đa (Max) tự động chèn dấu chấm.
 
-- [ ] **Task 9: Nâng Cấp Tính Năng Cao Cấp (Học Hỏi Từ RentNow.vn)**
-  - [ ] **1. Bản Đồ Tương Tác Căn Hộ Với Pin Giá (Interactive Map View)** ⭐ *(Ưu tiên hàng đầu)*: Tích hợp bản đồ Leaflet / OpenStreetMap hiển thị các pin giá tiền từng căn hộ tại Đà Nẵng (vd: `15M`, `16M`, `17M`). Bấm vào pin giá sẽ xem popup thông tin nhanh và chuyển đến chi tiết.
-  - [ ] **2. Chuyển Đổi Tiền Tệ Tự Động (VND ⇄ USD Switcher)**: Nút chọn đơn vị tiền tệ VND (₫) hoặc USD ($) ở Header/Card hỗ trợ khách hàng nước ngoài & expat.
-  - [ ] **3. Danh Sách Yêu Thích / Lưu Phòng (`/saved` - Favorites List)**: Nút thả tim ❤️ lưu danh sách các phòng ưa thích để khách tiện so sánh trước khi liên hệ xem phòng.
+- [x] **Task 9: Nâng Cấp Tính Năng Cao Cấp (Học Hỏi Từ RentNow.vn)**
+  - [x] **1. Bản Đồ Tương Tác Căn Hộ Với Pin Giá (Interactive Map View)** ⭐: Tích hợp bản đồ Leaflet / OpenStreetMap hiển thị các pin giá tiền từng căn hộ tại Đà Nẵng (vd: `15M`, `16M`, `17M`). Bấm vào pin giá xem nhanh thông tin phòng và chuyển đến chi tiết.
+  - [x] **2. Chuyển Đổi Tiền Tệ Tự Động (VND ⇄ USD Switcher)**: Nút chọn đơn vị tiền tệ VND (₫) hoặc USD ($) ở Header/Card hỗ trợ khách hàng nước ngoài & expat.
+  - [x] **3. Danh Sách Yêu Thích / Lưu Phòng (`/saved` - Favorites List)**: Nút thả tim ❤️ lưu danh sách các phòng ưa thích để khách tiện so sánh trước khi liên hệ xem phòng.

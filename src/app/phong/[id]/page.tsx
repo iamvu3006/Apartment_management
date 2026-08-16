@@ -5,6 +5,7 @@ import Link from "next/link";
 import { supabase } from "@/lib/supabase";
 import { Room, STATUS_LABELS, STATUS_COLORS } from "@/types/room";
 import { CONTACT_CONFIG } from "@/config/contact";
+import { useApp } from "@/context/AppContext";
 
 export default function RoomDetailPage({
   params,
@@ -16,6 +17,8 @@ export default function RoomDetailPage({
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [activeImageIndex, setActiveImageIndex] = useState(0);
+
+  const { currency, toggleCurrency, formatPrice, isFavorite, toggleFavorite } = useApp();
 
   useEffect(() => {
     async function fetchRoom() {
@@ -72,6 +75,7 @@ export default function RoomDetailPage({
   const currentImage = hasImages
     ? room.images[activeImageIndex] || room.images[0]
     : null;
+  const favorited = isFavorite(room.id);
 
   return (
     <div className="min-h-screen bg-slate-50 flex flex-col pb-24 lg:pb-12">
@@ -99,6 +103,27 @@ export default function RoomDetailPage({
           </Link>
 
           <div className="flex items-center gap-3">
+            {/* Currency Switcher */}
+            <button
+              onClick={toggleCurrency}
+              className="text-xs bg-slate-800 hover:bg-slate-700 text-slate-200 px-3 py-1.5 rounded-lg border border-slate-700 font-bold transition"
+            >
+              {currency === "VND" ? "🇻🇳 ₫ VND" : "🇺🇸 $ USD"}
+            </button>
+
+            {/* Favorite Button */}
+            <button
+              onClick={() => toggleFavorite(room.id)}
+              className={`text-xs px-3 py-1.5 rounded-lg border font-bold transition flex items-center gap-1 ${
+                favorited
+                  ? "bg-rose-500 text-white border-rose-500 shadow-sm"
+                  : "bg-slate-800 text-slate-200 border-slate-700 hover:bg-slate-700"
+              }`}
+            >
+              <span>❤️</span>
+              <span>{favorited ? "Saved" : "Save"}</span>
+            </button>
+
             <span
               className={`text-xs px-3 py-1 rounded-lg shadow-sm font-semibold ${STATUS_COLORS[room.status]}`}
             >
@@ -255,10 +280,7 @@ export default function RoomDetailPage({
                     Monthly Rent
                   </span>
                   <span className="text-lg sm:text-xl font-extrabold text-rose-600">
-                    {room.price.toLocaleString("vi-VN")} VND
-                    <span className="text-xs font-normal text-slate-500">
-                      /mo
-                    </span>
+                    {formatPrice(room.price, "/mo")}
                   </span>
                 </div>
                 <div>
@@ -293,7 +315,7 @@ export default function RoomDetailPage({
             </div>
           </div>
 
-          {/* Right Column: Desktop Contact Sidebar (Both Specialists) */}
+          {/* Right Column: Desktop Contact Sidebar */}
           <div className="hidden lg:block space-y-6">
             <div className="bg-white rounded-2xl border border-slate-200/80 p-6 shadow-sm sticky top-20 space-y-6">
               <div>
@@ -403,7 +425,7 @@ export default function RoomDetailPage({
         </div>
       </main>
 
-      {/* Fixed Bottom Mobile Action Bar (Both Contacts) */}
+      {/* Fixed Bottom Mobile Action Bar */}
       <div className="lg:hidden fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-slate-200 p-2.5 z-30 shadow-2xl space-y-1.5">
         <div className="text-[10px] font-extrabold text-slate-500 text-center uppercase tracking-wider">
           Contact Specialists 24/7

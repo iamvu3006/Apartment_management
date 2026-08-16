@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Be_Vietnam_Pro } from "next/font/google";
 import "./globals.css";
+import { AppProvider } from "@/context/AppContext";
 
 const beVietnamPro = Be_Vietnam_Pro({
   subsets: ["vietnamese", "latin"],
@@ -23,7 +24,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={beVietnamPro.variable}>
       <body className={`${beVietnamPro.className} antialiased bg-slate-50 text-slate-900 min-h-screen selection:bg-sky-500 selection:text-white`}>
-        {children}
+        <AppProvider>{children}</AppProvider>
       </body>
     </html>
   );
