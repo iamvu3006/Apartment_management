@@ -10,34 +10,56 @@ interface RoomMapInnerProps {
   rooms: Room[];
 }
 
-// Coordinate mapping for Da Nang areas & streets
-function getRoomCoordinates(room: Room): [number, number] {
-  const addr = (room.address + " " + room.district + " " + room.title).toLowerCase();
+// Accurate coordinate mapping for Da Nang streets & districts
+function getRoomCoordinates(room: Room, index: number = 0): [number, number] {
+  const text = (room.address + " " + room.title + " " + room.district).toLowerCase();
 
-  if (addr.includes("pham kiet")) {
-    return [16.0352 + (Math.random() - 0.5) * 0.002, 108.2435 + (Math.random() - 0.5) * 0.002];
-  }
-  if (addr.includes("an my 7") || addr.includes("an mỹ 7")) {
-    return [16.0598 + (Math.random() - 0.5) * 0.002, 108.2318 + (Math.random() - 0.5) * 0.002];
-  }
-  if (addr.includes("phuoc my") || addr.includes("phước mỹ")) {
-    return [16.0580 + (Math.random() - 0.5) * 0.003, 108.2420 + (Math.random() - 0.5) * 0.003];
-  }
-  if (addr.includes("son tra") || addr.includes("sơn trà")) {
-    return [16.0680 + (Math.random() - 0.5) * 0.005, 108.2380 + (Math.random() - 0.5) * 0.005];
-  }
-  if (addr.includes("ngu hanh son") || addr.includes("ngũ hành sơn")) {
-    return [16.0380 + (Math.random() - 0.5) * 0.005, 108.2440 + (Math.random() - 0.5) * 0.005];
-  }
-  if (addr.includes("hai chau") || addr.includes("hải châu")) {
-    return [16.0600 + (Math.random() - 0.5) * 0.005, 108.2150 + (Math.random() - 0.5) * 0.005];
-  }
-  if (addr.includes("thanh khe") || addr.includes("thanh khê")) {
-    return [16.0630 + (Math.random() - 0.5) * 0.005, 108.1950 + (Math.random() - 0.5) * 0.005];
+  // Deterministic micro-offset (~15 meters) so multiple units in the same building don't overlap completely
+  const offsetLat = ((index % 3) - 1) * 0.00018;
+  const offsetLng = Math.floor(index / 3) * 0.0002 - 0.0001;
+
+  // 1. Exact match for An Mỹ 7 (Son Tra, next to Dragon Bridge)
+  if (text.includes("an my 7") || text.includes("an mỹ 7") || text.includes("an my") || text.includes("an mỹ")) {
+    return [16.0625 + offsetLat, 108.2312 + offsetLng];
   }
 
-  // Default Da Nang center fallback with slight offset per room
-  return [16.0544 + (Math.random() - 0.5) * 0.01, 108.2208 + (Math.random() - 0.5) * 0.01];
+  // 2. Exact match for Phạm Kiệt (Ngu Hanh Son, near beach)
+  if (text.includes("pham kiet") || text.includes("phạm kiệt")) {
+    return [16.0352 + offsetLat, 108.2435 + offsetLng];
+  }
+
+  // 3. Phước Mỹ (Son Tra beach area)
+  if (text.includes("phuoc my") || text.includes("phước mỹ")) {
+    return [16.0590 + offsetLat, 108.2420 + offsetLng];
+  }
+
+  // 4. Mỹ An / An Thượng (Ngu Hanh Son Expat quarter)
+  if (text.includes("my an") || text.includes("mỹ an") || text.includes("an thuong") || text.includes("an thượng")) {
+    return [16.0480 + offsetLat, 108.2420 + offsetLng];
+  }
+
+  // 5. General Son Tra district (near Dragon Bridge / Vo Van Kiet)
+  if (text.includes("son tra") || text.includes("sơn trà")) {
+    return [16.0620 + offsetLat, 108.2350 + offsetLng];
+  }
+
+  // 6. General Ngu Hanh Son district
+  if (text.includes("ngu hanh son") || text.includes("ngũ hành sơn")) {
+    return [16.0380 + offsetLat, 108.2430 + offsetLng];
+  }
+
+  // 7. General Hai Chau district (Downtown / Bach Dang)
+  if (text.includes("hai chau") || text.includes("hải châu")) {
+    return [16.0610 + offsetLat, 108.2220 + offsetLng];
+  }
+
+  // 8. General Thanh Khe district
+  if (text.includes("thanh khe") || text.includes("thanh khê")) {
+    return [16.0630 + offsetLat, 108.1980 + offsetLng];
+  }
+
+  // Fallback: Da Nang Dragon Bridge center
+  return [16.0600 + offsetLat, 108.2250 + offsetLng];
 }
 
 export default function RoomMapInner({ rooms }: RoomMapInnerProps) {
@@ -48,7 +70,7 @@ export default function RoomMapInner({ rooms }: RoomMapInnerProps) {
   useEffect(() => {
     if (!mapContainerRef.current) return;
 
-    // Initialize Leaflet map with standard OpenStreetMap tiles (showing full amenities & details)
+    // Initialize Leaflet map with standard OpenStreetMap tiles
     if (!mapInstanceRef.current) {
       const map = L.map(mapContainerRef.current, {
         center: [16.0544, 108.2300], // Da Nang Dragon Bridge center
@@ -75,9 +97,9 @@ export default function RoomMapInner({ rooms }: RoomMapInnerProps) {
 
     const markersBounds: [number, number][] = [];
 
-    // Add price pin markers for each room
-    rooms.forEach((room) => {
-      const coords = getRoomCoordinates(room);
+    // Add accurate price pin markers for each room
+    rooms.forEach((room, index) => {
+      const coords = getRoomCoordinates(room, index);
       markersBounds.push(coords);
 
       const priceText =
