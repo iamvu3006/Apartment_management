@@ -50,3 +50,8 @@
   - [x] **1. Bản Đồ Tương Tác Căn Hộ Với Pin Giá (Interactive Map View)** ⭐: Tích hợp bản đồ Leaflet / OpenStreetMap hiển thị các pin giá tiền từng căn hộ tại Đà Nẵng (vd: `15M`, `16M`, `17M`). Bấm vào pin giá xem nhanh thông tin phòng và chuyển đến chi tiết.
   - [x] **2. Chuyển Đổi Tiền Tệ Tự Động (VND ⇄ USD Switcher)**: Nút chọn đơn vị tiền tệ VND (₫) hoặc USD ($) ở Header/Card hỗ trợ khách hàng nước ngoài & expat.
   - [x] **3. Danh Sách Yêu Thích / Lưu Phòng (`/saved` - Favorites List)**: Nút thả tim ❤️ lưu danh sách các phòng ưa thích để khách tiện so sánh trước khi liên hệ xem phòng.
+
+- [x] **Task 10: Bộ Chuyển Đổi 5 Ngôn Ngữ & Bản Đồ Quốc Tế (5-Language Selector & CartoDB International Map)**
+  - [x] **Tích hợp Menu Chọn 5 Ngôn Ngữ**: 🇬🇧 English, 🇰🇷 한국어 (Korean), 🇨🇳 中文 (Chinese), 🇷🇺 Русский (Russian), 🇻🇳 Tiếng Việt.
+  - [x] **Bản Đồ Quốc Tế CartoDB**: Chuyển bản đồ sang lớp CartoDB Voyager hiển thị tên đường và địa danh chuẩn ký tự quốc tế/Latinh sắc nét cho khách nước ngoài.
+  - [x] **Dịch Popup & Giao Diện**: Popup bản đồ và toàn bộ các nút hành động tự động dịch theo ngôn ngữ được chọn.

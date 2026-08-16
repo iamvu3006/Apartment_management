@@ -7,7 +7,7 @@ import { Room, STATUS_LABELS, STATUS_COLORS } from "@/types/room";
 import RoomFilter, { FilterState } from "@/components/RoomFilter";
 import RoomMap from "@/components/RoomMap";
 import { CONTACT_CONFIG } from "@/config/contact";
-import { useApp } from "@/context/AppContext";
+import { useApp, LANGUAGES, Language } from "@/context/AppContext";
 
 const initialFilters: FilterState = {
   search: "",
@@ -25,7 +25,17 @@ export default function HomePage() {
   const [filters, setFilters] = useState<FilterState>(initialFilters);
   const [viewMode, setViewMode] = useState<"grid" | "map">("grid");
 
-  const { currency, toggleCurrency, formatPrice, isFavorite, toggleFavorite, favorites } = useApp();
+  const {
+    currency,
+    toggleCurrency,
+    language,
+    setLanguage,
+    t,
+    formatPrice,
+    isFavorite,
+    toggleFavorite,
+    favorites,
+  } = useApp();
 
   useEffect(() => {
     async function fetchRooms() {
@@ -133,11 +143,24 @@ export default function HomePage() {
             </div>
           </Link>
 
-          <div className="flex items-center gap-2.5 sm:gap-4">
+          <div className="flex items-center gap-2 sm:gap-3">
+            {/* Language Switcher Dropdown */}
+            <select
+              value={language}
+              onChange={(e) => setLanguage(e.target.value as Language)}
+              className="bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs px-2.5 py-1.5 rounded-lg border border-slate-700 font-bold focus:outline-none transition cursor-pointer"
+            >
+              {LANGUAGES.map((lang) => (
+                <option key={lang.code} value={lang.code} className="bg-slate-900 text-white">
+                  {lang.flag} {lang.name}
+                </option>
+              ))}
+            </select>
+
             {/* Currency Switcher Button */}
             <button
               onClick={toggleCurrency}
-              className="flex items-center gap-1 text-xs bg-slate-800 hover:bg-slate-700 text-slate-200 px-3 py-1.5 rounded-lg border border-slate-700 font-bold transition"
+              className="flex items-center gap-1 text-xs bg-slate-800 hover:bg-slate-700 text-slate-200 px-2.5 py-1.5 rounded-lg border border-slate-700 font-bold transition"
               title="Toggle currency between VND and USD"
             >
               <span>{currency === "VND" ? "🇻🇳 ₫ VND" : "🇺🇸 $ USD"}</span>
@@ -148,7 +171,7 @@ export default function HomePage() {
               href="/saved"
               className="relative text-xs bg-slate-800 hover:bg-slate-700 text-slate-200 px-3 py-1.5 rounded-lg border border-slate-700 font-semibold transition flex items-center gap-1"
             >
-              <span>❤️ Saved</span>
+              <span>❤️ {t.saved}</span>
               {favorites.length > 0 && (
                 <span className="w-4 h-4 bg-rose-500 text-white text-[10px] font-extrabold rounded-full flex items-center justify-center">
                   {favorites.length}
@@ -195,7 +218,7 @@ export default function HomePage() {
                   onChange={(e) =>
                     setFilters((prev) => ({ ...prev, search: e.target.value }))
                   }
-                  placeholder="Search by district, street, or property type (e.g., Son Tra, Studio)..."
+                  placeholder={t.searchPlaceholder}
                   className="w-full pl-10 pr-4 py-3 bg-transparent text-slate-900 text-sm focus:outline-none placeholder:text-slate-400 font-medium"
                 />
                 <svg
@@ -319,7 +342,7 @@ export default function HomePage() {
                       : "text-slate-600 hover:text-slate-900"
                   }`}
                 >
-                  📋 Grid View
+                  {t.gridView}
                 </button>
                 <button
                   onClick={() => setViewMode("map")}
@@ -329,7 +352,7 @@ export default function HomePage() {
                       : "text-slate-600 hover:text-slate-900"
                   }`}
                 >
-                  🗺️ Map View
+                  {t.mapView}
                 </button>
               </div>
             </div>
@@ -446,7 +469,7 @@ export default function HomePage() {
                       <div className="pt-3 border-t border-slate-100 flex items-center justify-between">
                         <div>
                           <span className="text-[10px] text-slate-400 font-medium block uppercase tracking-wider">
-                            Monthly Rent
+                            {t.monthlyRent}
                           </span>
                           <span className="text-base sm:text-lg font-extrabold text-rose-600">
                             {formatPrice(room.price, "/mo")}
@@ -457,7 +480,7 @@ export default function HomePage() {
                           href={`/phong/${room.id}`}
                           className="text-xs text-sky-600 group-hover:text-sky-700 font-bold flex items-center gap-1 group-hover:translate-x-0.5 transition"
                         >
-                          View Details →
+                          {t.viewDetails}
                         </Link>
                       </div>
                     </div>

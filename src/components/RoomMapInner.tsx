@@ -3,7 +3,7 @@
 import { useEffect, useRef } from "react";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
-import { Room, STATUS_LABELS } from "@/types/room";
+import { Room } from "@/types/room";
 import { useApp } from "@/context/AppContext";
 
 interface RoomMapInnerProps {
@@ -43,12 +43,12 @@ function getRoomCoordinates(room: Room): [number, number] {
 export default function RoomMapInner({ rooms }: RoomMapInnerProps) {
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const mapInstanceRef = useRef<L.Map | null>(null);
-  const { currency, formatPrice } = useApp();
+  const { currency, formatPrice, t } = useApp();
 
   useEffect(() => {
     if (!mapContainerRef.current) return;
 
-    // Initialize Leaflet map
+    // Initialize Leaflet map with CartoDB Voyager international tiles
     if (!mapInstanceRef.current) {
       const map = L.map(mapContainerRef.current, {
         center: [16.0544, 108.2300], // Da Nang Dragon Bridge center
@@ -56,8 +56,9 @@ export default function RoomMapInner({ rooms }: RoomMapInnerProps) {
         scrollWheelZoom: true,
       });
 
-      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+      L.tileLayer("https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png", {
+        attribution: '&copy; <a href="https://carto.com/">CARTO</a> & OpenStreetMap',
+        maxZoom: 19,
       }).addTo(map);
 
       mapInstanceRef.current = map;
@@ -104,10 +105,10 @@ export default function RoomMapInner({ rooms }: RoomMapInnerProps) {
               ? `<img src="${room.images[0]}" style="width: 100%; height: 120px; object-fit: cover; border-radius: 8px; margin-bottom: 6px;" />`
               : ""
           }
-          <div style="font-size: 11px; font-weight: bold; color: #0284c7; text-transform: uppercase;">${room.district} District</div>
+          <div style="font-size: 11px; font-weight: bold; color: #0284c7; text-transform: uppercase;">${room.district} ${t.district}</div>
           <div style="font-size: 13px; font-weight: bold; color: #0f172a; margin-top: 2px; line-clamp: 2;">${room.title}</div>
           <div style="font-size: 14px; font-weight: 800; color: #e11d48; margin-top: 4px;">${formatPrice(room.price, "/mo")}</div>
-          <a href="/phong/${room.id}" style="display: block; width: 100%; text-align: center; background: #0284c7; color: white; padding: 6px 0; border-radius: 6px; font-size: 12px; font-weight: bold; margin-top: 8px; text-decoration: none;">View Details →</a>
+          <a href="/phong/${room.id}" style="display: block; width: 100%; text-align: center; background: #0284c7; color: white; padding: 6px 0; border-radius: 6px; font-size: 12px; font-weight: bold; margin-top: 8px; text-decoration: none;">${t.viewDetails}</a>
         </div>
       `;
 
@@ -119,7 +120,7 @@ export default function RoomMapInner({ rooms }: RoomMapInnerProps) {
     if (markersBounds.length > 0) {
       map.fitBounds(markersBounds, { padding: [40, 40], maxZoom: 15 });
     }
-  }, [rooms, currency, formatPrice]);
+  }, [rooms, currency, formatPrice, t]);
 
   return (
     <div className="relative w-full h-[520px] rounded-2xl overflow-hidden border border-slate-200 shadow-sm z-10">

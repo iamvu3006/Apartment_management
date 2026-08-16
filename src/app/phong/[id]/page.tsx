@@ -5,7 +5,7 @@ import Link from "next/link";
 import { supabase } from "@/lib/supabase";
 import { Room, STATUS_LABELS, STATUS_COLORS } from "@/types/room";
 import { CONTACT_CONFIG } from "@/config/contact";
-import { useApp } from "@/context/AppContext";
+import { useApp, LANGUAGES, Language } from "@/context/AppContext";
 
 export default function RoomDetailPage({
   params,
@@ -18,7 +18,16 @@ export default function RoomDetailPage({
   const [error, setError] = useState<string | null>(null);
   const [activeImageIndex, setActiveImageIndex] = useState(0);
 
-  const { currency, toggleCurrency, formatPrice, isFavorite, toggleFavorite } = useApp();
+  const {
+    currency,
+    toggleCurrency,
+    language,
+    setLanguage,
+    t,
+    formatPrice,
+    isFavorite,
+    toggleFavorite,
+  } = useApp();
 
   useEffect(() => {
     async function fetchRoom() {
@@ -102,7 +111,20 @@ export default function RoomDetailPage({
             <span>Back to Property Listings</span>
           </Link>
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 sm:gap-3">
+            {/* Language Switcher */}
+            <select
+              value={language}
+              onChange={(e) => setLanguage(e.target.value as Language)}
+              className="bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs px-2.5 py-1.5 rounded-lg border border-slate-700 font-bold focus:outline-none transition cursor-pointer"
+            >
+              {LANGUAGES.map((lang) => (
+                <option key={lang.code} value={lang.code} className="bg-slate-900 text-white">
+                  {lang.flag} {lang.name}
+                </option>
+              ))}
+            </select>
+
             {/* Currency Switcher */}
             <button
               onClick={toggleCurrency}
@@ -121,7 +143,7 @@ export default function RoomDetailPage({
               }`}
             >
               <span>❤️</span>
-              <span>{favorited ? "Saved" : "Save"}</span>
+              <span>{favorited ? t.saved : "Save"}</span>
             </button>
 
             <span
@@ -238,7 +260,7 @@ export default function RoomDetailPage({
             <div className="bg-white rounded-2xl border border-slate-200/80 p-6 sm:p-8 shadow-sm space-y-6">
               <div>
                 <div className="flex flex-wrap items-center gap-2 mb-2 text-xs font-bold uppercase tracking-wider text-sky-600">
-                  <span>{room.district} District</span>
+                  <span>{room.district} {t.district}</span>
                   {room.room_type && (
                     <>
                       <span>•</span>
@@ -277,7 +299,7 @@ export default function RoomDetailPage({
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 p-5 bg-slate-50 rounded-2xl border border-slate-100">
                 <div>
                   <span className="text-xs text-slate-400 font-medium block uppercase tracking-wider">
-                    Monthly Rent
+                    {t.monthlyRent}
                   </span>
                   <span className="text-lg sm:text-xl font-extrabold text-rose-600">
                     {formatPrice(room.price, "/mo")}
@@ -285,7 +307,7 @@ export default function RoomDetailPage({
                 </div>
                 <div>
                   <span className="text-xs text-slate-400 font-medium block uppercase tracking-wider">
-                    Living Area
+                    {t.livingArea}
                   </span>
                   <span className="text-lg sm:text-xl font-extrabold text-slate-900">
                     {room.area}{" "}
@@ -294,7 +316,7 @@ export default function RoomDetailPage({
                 </div>
                 <div className="col-span-2 sm:col-span-1">
                   <span className="text-xs text-slate-400 font-medium block uppercase tracking-wider">
-                    Property Type
+                    {t.propertyType}
                   </span>
                   <span className="text-sm sm:text-base font-bold text-slate-900 truncate block">
                     {room.room_type || "Apartment / Room"}
@@ -345,7 +367,7 @@ export default function RoomDetailPage({
                     href={`tel:${CONTACT_CONFIG.primary.phone}`}
                     className="flex items-center justify-center gap-1.5 bg-rose-600 hover:bg-rose-700 text-white font-bold py-2 px-3 rounded-xl text-xs shadow-sm transition"
                   >
-                    <span>Call Vu</span>
+                    <span>{t.call} Vu</span>
                   </a>
                   <a
                     href={`https://zalo.me/${CONTACT_CONFIG.primary.zalo}`}
@@ -392,7 +414,7 @@ export default function RoomDetailPage({
                     href={`tel:${CONTACT_CONFIG.secondary.phone}`}
                     className="flex items-center justify-center gap-1.5 bg-rose-600 hover:bg-rose-700 text-white font-bold py-2 px-3 rounded-xl text-xs shadow-sm transition"
                   >
-                    <span>Call Han My</span>
+                    <span>{t.call} Han My</span>
                   </a>
                   <a
                     href={`https://zalo.me/${CONTACT_CONFIG.secondary.zalo}`}
