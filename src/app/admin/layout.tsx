@@ -70,7 +70,7 @@ export default function AdminLayout({
       <div className="min-h-screen flex items-center justify-center bg-slate-50 text-slate-500">
         <div className="flex items-center gap-3">
           <div className="w-5 h-5 border-2 border-sky-600 border-t-transparent rounded-full animate-spin"></div>
-          <p className="text-sm font-medium">Đang xác thực quyền truy cập...</p>
+          <p className="text-sm font-medium">Verifying access permissions...</p>
         </div>
       </div>
     );
@@ -94,14 +94,14 @@ export default function AdminLayout({
               className="font-bold text-base text-white flex items-center gap-2"
             >
               <span className="w-3 h-3 rounded-full bg-sky-500"></span>
-              Admin Control
+              Admin Dashboard
             </Link>
             <Link
               href="/"
               target="_blank"
               className="text-xs text-slate-400 hover:text-white transition flex items-center gap-1"
             >
-              <span>Xem trang public ↗</span>
+              <span>View Public Site ↗</span>
             </Link>
           </div>
 
@@ -115,7 +115,7 @@ export default function AdminLayout({
               onClick={handleLogout}
               className="text-xs text-slate-300 hover:text-rose-400 px-3 py-1.5 rounded-lg border border-slate-700 hover:border-rose-400/50 transition font-medium"
             >
-              Đăng xuất
+              Sign Out
             </button>
           </div>
         </div>

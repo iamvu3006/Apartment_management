@@ -6,7 +6,7 @@ import { supabase } from "@/lib/supabase";
 import { Room, RoomInput, RoomStatus } from "@/types/room";
 
 interface RoomFormProps {
-  initialData?: Room; // nếu có -> chế độ sửa, không có -> chế độ thêm mới
+  initialData?: Room;
 }
 
 const emptyForm: RoomInput = {
@@ -72,7 +72,7 @@ export default function RoomForm({ initialData }: RoomFormProps) {
         .upload(fileName, file);
 
       if (uploadError) {
-        throw new Error(`Lỗi upload ảnh: ${uploadError.message}`);
+        throw new Error(`Image upload failed: ${uploadError.message}`);
       }
 
       const { data } = supabase.storage
@@ -115,7 +115,7 @@ export default function RoomForm({ initialData }: RoomFormProps) {
       router.push("/admin");
       router.refresh();
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Đã có lỗi xảy ra");
+      setError(err instanceof Error ? err.message : "An error occurred");
     } finally {
       setUploading(false);
     }
@@ -124,111 +124,131 @@ export default function RoomForm({ initialData }: RoomFormProps) {
   return (
     <form onSubmit={handleSubmit} className="space-y-5 max-w-xl">
       {error && (
-        <div className="bg-red-50 text-red-700 border border-red-200 rounded-lg px-4 py-3 text-sm">
+        <div className="bg-rose-50 text-rose-700 border border-rose-200 rounded-xl px-4 py-3 text-sm">
           {error}
         </div>
       )}
 
       <div>
-        <label className="block text-sm font-medium mb-1">Tiêu đề phòng</label>
+        <label className="block text-sm font-semibold text-slate-700 mb-1">
+          Listing Title
+        </label>
         <input
           required
           type="text"
           value={form.title}
           onChange={(e) => handleChange("title", e.target.value)}
-          placeholder="VD: Phòng trọ gác lửng gần cầu Rồng"
-          className="w-full rounded-lg border border-stone-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-sky-500"
+          placeholder="e.g., Modern Studio Apartment near Dragon Bridge"
+          className="w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-slate-900 focus:outline-none focus:ring-2 focus:ring-sky-500 text-sm"
         />
       </div>
 
       <div className="grid grid-cols-2 gap-4">
         <div>
-          <label className="block text-sm font-medium mb-1">Giá thuê (đồng/tháng)</label>
+          <label className="block text-sm font-semibold text-slate-700 mb-1">
+            Monthly Rent (VND)
+          </label>
           <input
             required
             type="number"
             min={0}
             value={form.price}
             onChange={(e) => handleChange("price", Number(e.target.value))}
-            className="w-full rounded-lg border border-stone-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-sky-500"
+            placeholder="e.g. 5000000"
+            className="w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-slate-900 focus:outline-none focus:ring-2 focus:ring-sky-500 text-sm"
           />
         </div>
         <div>
-          <label className="block text-sm font-medium mb-1">Diện tích (m²)</label>
+          <label className="block text-sm font-semibold text-slate-700 mb-1">
+            Area (m²)
+          </label>
           <input
             required
             type="number"
             min={0}
             value={form.area}
             onChange={(e) => handleChange("area", Number(e.target.value))}
-            className="w-full rounded-lg border border-stone-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-sky-500"
+            placeholder="e.g. 35"
+            className="w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-slate-900 focus:outline-none focus:ring-2 focus:ring-sky-500 text-sm"
           />
         </div>
       </div>
 
       <div>
-        <label className="block text-sm font-medium mb-1">Địa chỉ</label>
+        <label className="block text-sm font-semibold text-slate-700 mb-1">
+          Street Address
+        </label>
         <input
           required
           type="text"
           value={form.address}
           onChange={(e) => handleChange("address", e.target.value)}
-          placeholder="Số nhà, đường..."
-          className="w-full rounded-lg border border-stone-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-sky-500"
+          placeholder="Street number, street name..."
+          className="w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-slate-900 focus:outline-none focus:ring-2 focus:ring-sky-500 text-sm"
         />
       </div>
 
       <div className="grid grid-cols-2 gap-4">
         <div>
-          <label className="block text-sm font-medium mb-1">Khu vực/Quận</label>
+          <label className="block text-sm font-semibold text-slate-700 mb-1">
+            District / Area
+          </label>
           <input
             required
             type="text"
             value={form.district}
             onChange={(e) => handleChange("district", e.target.value)}
-            placeholder="VD: Hải Châu"
-            className="w-full rounded-lg border border-stone-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-sky-500"
+            placeholder="e.g., Hai Chau, Son Tra"
+            className="w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-slate-900 focus:outline-none focus:ring-2 focus:ring-sky-500 text-sm"
           />
         </div>
         <div>
-          <label className="block text-sm font-medium mb-1">Loại phòng</label>
+          <label className="block text-sm font-semibold text-slate-700 mb-1">
+            Property Type
+          </label>
           <input
             required
             type="text"
             value={form.room_type}
             onChange={(e) => handleChange("room_type", e.target.value)}
-            placeholder="VD: Chung cư mini"
-            className="w-full rounded-lg border border-stone-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-sky-500"
+            placeholder="e.g., Studio, Mini Apartment"
+            className="w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-slate-900 focus:outline-none focus:ring-2 focus:ring-sky-500 text-sm"
           />
         </div>
       </div>
 
       <div>
-        <label className="block text-sm font-medium mb-1">Trạng thái</label>
+        <label className="block text-sm font-semibold text-slate-700 mb-1">
+          Availability Status
+        </label>
         <select
           value={form.status}
           onChange={(e) => handleChange("status", e.target.value as RoomStatus)}
-          className="w-full rounded-lg border border-stone-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-sky-500"
+          className="w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-slate-900 focus:outline-none focus:ring-2 focus:ring-sky-500 text-sm"
         >
-          <option value="trong">Còn trống</option>
-          <option value="da_coc">Đã cọc</option>
-          <option value="da_thue">Đã cho thuê</option>
+          <option value="trong">Available</option>
+          <option value="da_coc">Reserved</option>
+          <option value="da_thue">Rented</option>
         </select>
       </div>
 
       <div>
-        <label className="block text-sm font-medium mb-1">Mô tả</label>
+        <label className="block text-sm font-semibold text-slate-700 mb-1">
+          Description
+        </label>
         <textarea
           rows={4}
           value={form.description ?? ""}
           onChange={(e) => handleChange("description", e.target.value)}
-          placeholder="Tiện ích, giờ giấc, nội thất..."
-          className="w-full rounded-lg border border-stone-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-sky-500"
+          placeholder="Amenities, policies, furniture, balcony..."
+          className="w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-slate-900 focus:outline-none focus:ring-2 focus:ring-sky-500 text-sm"
         />
       </div>
 
       <div>
-        <label className="block text-sm font-medium mb-1">Ảnh phòng</label>
+        <label className="block text-sm font-semibold text-slate-700 mb-1">
+          Property Photos
+        </label>
 
         {existingImages.length > 0 && (
           <div className="flex flex-wrap gap-2 mb-3">
@@ -237,13 +257,13 @@ export default function RoomForm({ initialData }: RoomFormProps) {
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={url}
-                  alt="Ảnh phòng"
-                  className="w-24 h-24 object-cover rounded-lg border border-stone-200"
+                  alt="Property photo"
+                  className="w-24 h-24 object-cover rounded-xl border border-slate-200"
                 />
                 <button
                   type="button"
                   onClick={() => removeExistingImage(url)}
-                  className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 text-xs flex items-center justify-center"
+                  className="absolute -top-2 -right-2 bg-rose-500 text-white rounded-full w-6 h-6 text-xs flex items-center justify-center font-bold shadow"
                 >
                   ×
                 </button>
@@ -257,11 +277,11 @@ export default function RoomForm({ initialData }: RoomFormProps) {
           accept="image/*"
           multiple
           onChange={handleFileSelect}
-          className="w-full text-sm"
+          className="w-full text-sm text-slate-600"
         />
         {imageFiles.length > 0 && (
-          <p className="text-xs text-stone-500 mt-1">
-            {imageFiles.length} ảnh mới sẽ được upload khi lưu
+          <p className="text-xs text-slate-500 mt-1 font-medium">
+            {imageFiles.length} new photo(s) selected and will be uploaded on save
           </p>
         )}
       </div>
@@ -270,16 +290,16 @@ export default function RoomForm({ initialData }: RoomFormProps) {
         <button
           type="submit"
           disabled={uploading}
-          className="bg-sky-600 hover:bg-sky-700 disabled:bg-sky-300 text-white font-medium px-5 py-2.5 rounded-lg transition"
+          className="bg-sky-600 hover:bg-sky-700 disabled:bg-sky-300 text-white font-semibold px-5 py-2.5 rounded-xl shadow-sm transition text-sm"
         >
-          {uploading ? "Đang lưu..." : isEditMode ? "Lưu thay đổi" : "Thêm phòng"}
+          {uploading ? "Saving..." : isEditMode ? "Save Changes" : "Add Property"}
         </button>
         <button
           type="button"
           onClick={() => router.push("/admin")}
-          className="border border-stone-300 px-5 py-2.5 rounded-lg hover:bg-stone-100 transition"
+          className="border border-slate-300 px-5 py-2.5 rounded-xl hover:bg-slate-100 transition text-sm font-semibold text-slate-700"
         >
-          Huỷ
+          Cancel
         </button>
       </div>
     </form>

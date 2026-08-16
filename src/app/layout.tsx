@@ -10,9 +10,9 @@ const beVietnamPro = Be_Vietnam_Pro({
 });
 
 export const metadata: Metadata = {
-  title: "Phòng Trọ & Căn Hộ Cho Thuê Đà Nẵng | Vũ Real Estate",
+  title: "Da Nang Apartments & Rooms for Rent | Vu Real Estate",
   description:
-    "Hệ thống phòng trọ, căn hộ mini, studio cho thuê chính chủ & tư vấn uy tín tại Đà Nẵng. Hình ảnh thực tế, thông tin minh bạch.",
+    "Verified long-term and short-term apartment rentals, studio apartments, and rooms for expats and digital nomads in Da Nang. Real photos & transparent pricing.",
 };
 
 export default function RootLayout({
@@ -21,7 +21,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="vi" className={beVietnamPro.variable}>
+    <html lang="en" className={beVietnamPro.variable}>
       <body className={`${beVietnamPro.className} antialiased bg-slate-50 text-slate-900 min-h-screen selection:bg-sky-500 selection:text-white`}>
         {children}
       </body>

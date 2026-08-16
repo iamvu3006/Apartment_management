@@ -14,13 +14,13 @@ export interface Room {
   created_at: string;
 }
 
-// Dữ liệu dùng khi tạo/sửa phòng (chưa có id, created_at)
+// Data input used when creating/editing a room
 export type RoomInput = Omit<Room, "id" | "created_at">;
 
 export const STATUS_LABELS: Record<RoomStatus, string> = {
-  trong: "Còn trống",
-  da_coc: "Đã cọc",
-  da_thue: "Đã cho thuê",
+  trong: "Available",
+  da_coc: "Reserved",
+  da_thue: "Rented",
 };
 
 export const STATUS_COLORS: Record<RoomStatus, string> = {

@@ -19,7 +19,7 @@
 
 - [x] **Task 4: Thiết kế lại giao diện cho chuyên nghiệp**
   - [x] Chốt hướng thiết kế trước khi code: bảng màu (Navy Deep `#0F172A`, Ocean Teal `#0284C7`, Sunset Rose `#E11D48`, Slate Bg `#F8FAFC`), font Be Vietnam Pro
-  - [x] Import Google Font Be Vietnam Pro hỗ trợ chuẩn tiếng Việt
+  - [x] Import Google Font Be Vietnam Pro hỗ trợ chuẩn tiếng Việt & tiếng Anh
   - [x] Thêm phần Hero giới thiệu ấn tượng ở trang chủ với thanh tìm kiếm nhanh
   - [x] Thiết kế lại Room Card, Badge trạng thái overlay, Header/Footer chuyên nghiệp
   - [x] Đảm bảo mobile-first và responsive hoàn hảo
@@ -28,3 +28,9 @@
   - [x] Kiểm tra build production (`npm run build`) không có lỗi ESLint/TypeScript
   - [x] Liệt kê danh sách biến môi trường cho Vercel dashboard (`.env.example`)
   - [x] Hướng dẫn các bước deploy thủ công
+
+- [x] **Task 6: Chuyển toàn bộ giao diện sang tiếng Anh (English Localization)**
+  - [x] Chuyển đổi toàn bộ UI trang chủ public, Hero section, Room Card, Header & Footer sang tiếng Anh
+  - [x] Chuyển đổi bộ lọc RoomFilter, nhãn trạng thái Availability (Available / Reserved / Rented), mức giá thuê sang tiếng Anh
+  - [x] Chuyển đổi trang chi tiết phòng `/phong/[id]`, nút liên hệ nhanh và widget hỗ trợ sang tiếng Anh
+  - [x] Chuyển đổi các trang Admin Control Dashboard & Form sang tiếng Anh

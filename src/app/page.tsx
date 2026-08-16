@@ -34,7 +34,7 @@ export default function HomePage() {
 
   const filteredRooms = useMemo(() => {
     return rooms.filter((room) => {
-      // 1. Từ khoá
+      // 1. Keyword search
       if (filters.search.trim()) {
         const q = filters.search.toLowerCase().trim();
         const titleMatch = room.title?.toLowerCase().includes(q);
@@ -42,7 +42,7 @@ export default function HomePage() {
         if (!titleMatch && !addressMatch) return false;
       }
 
-      // 2. Quận
+      // 2. District filter
       if (filters.district !== "all") {
         if (
           room.district?.trim().toLowerCase() !==
@@ -52,7 +52,7 @@ export default function HomePage() {
         }
       }
 
-      // 3. Khoảng giá
+      // 3. Price range filter
       if (filters.priceRange !== "all") {
         const p = Number(room.price);
         if (filters.priceRange === "under_3m" && p >= 3000000) return false;
@@ -69,7 +69,7 @@ export default function HomePage() {
         if (filters.priceRange === "over_8m" && p <= 8000000) return false;
       }
 
-      // 4. Loại phòng
+      // 4. Property type filter
       if (filters.roomType !== "all") {
         if (
           room.room_type?.trim().toLowerCase() !==
@@ -79,7 +79,7 @@ export default function HomePage() {
         }
       }
 
-      // 5. Trạng thái
+      // 5. Availability status filter
       if (filters.status !== "all") {
         if (room.status !== filters.status) return false;
       }
@@ -90,19 +90,19 @@ export default function HomePage() {
 
   return (
     <div className="min-h-screen flex flex-col bg-slate-50">
-      {/* Header Điều Hướng Top Bar */}
+      {/* Header Top Bar */}
       <header className="bg-slate-900 text-white sticky top-0 z-30 border-b border-slate-800 shadow-md">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2.5 group">
             <div className="w-9 h-9 rounded-xl bg-sky-500 text-white flex items-center justify-center font-bold text-lg shadow-sm group-hover:bg-sky-400 transition">
-              ĐN
+              DN
             </div>
             <div>
               <span className="font-extrabold text-base tracking-tight text-white block leading-none">
-                ĐÀ NẴNG HOMES
+                DA NANG HOMES
               </span>
               <span className="text-[10px] text-slate-400 font-medium tracking-wide uppercase">
-                Cho thuê phòng & Căn hộ
+                Apartments & Rooms for Rent
               </span>
             </div>
           </Link>
@@ -132,34 +132,32 @@ export default function HomePage() {
               href="/admin"
               className="text-xs bg-slate-800 hover:bg-slate-700 text-slate-200 hover:text-white px-3.5 py-1.5 rounded-lg border border-slate-700 font-medium transition"
             >
-              Quản trị
+              Admin Portal
             </Link>
           </div>
         </div>
       </header>
 
-      {/* Hero Section Ấn Tượng */}
+      {/* Hero Section */}
       <section className="bg-slate-900 text-white pt-10 pb-16 px-4 sm:px-6 relative overflow-hidden">
-        {/* Subtle decorative glow elements */}
         <div className="absolute top-0 right-1/4 w-96 h-96 bg-sky-500/10 rounded-full blur-3xl pointer-events-none"></div>
         <div className="absolute bottom-0 left-10 w-72 h-72 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none"></div>
 
         <div className="max-w-4xl mx-auto text-center space-y-5 relative z-10">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-sky-500/10 border border-sky-500/20 text-sky-300 text-xs font-semibold tracking-wide">
             <span className="w-2 h-2 rounded-full bg-sky-400 animate-pulse"></span>
-            Cập nhật liên tục phòng trống tại Đà Nẵng
+            Verified long-term & short-term rentals in Da Nang
           </div>
 
           <h1 className="text-2xl sm:text-4xl font-extrabold tracking-tight leading-tight text-white">
-            Tìm Phòng Trọ & Căn Hộ Ưu Ôi Tại Đà Nẵng
+            Find Your Ideal Apartment & Studio in Da Nang
           </h1>
 
           <p className="text-slate-300 text-sm sm:text-base max-w-2xl mx-auto leading-relaxed">
-            Hình ảnh thực tế 100% • Giá minh bạch • Hỗ trợ xem phòng tận nơi
-            nhanh chóng cùng tư vấn viên địa phương.
+            100% real photos • Transparent pricing • Fast English-speaking local assistance for expats & digital nomads.
           </p>
 
-          {/* Hero Search Box */}
+          {/* Search Box */}
           <div className="max-w-2xl mx-auto pt-2">
             <div className="relative bg-white rounded-2xl p-2 shadow-xl flex items-center gap-2">
               <div className="relative flex-1">
@@ -169,7 +167,7 @@ export default function HomePage() {
                   onChange={(e) =>
                     setFilters((prev) => ({ ...prev, search: e.target.value }))
                   }
-                  placeholder="Nhập khu vực, tên đường hoặc từ khoá (vd: Sơn Trà, Studio)..."
+                  placeholder="Search by district, street, or property type (e.g., Son Tra, Studio)..."
                   className="w-full pl-10 pr-4 py-3 bg-transparent text-slate-900 text-sm focus:outline-none placeholder:text-slate-400 font-medium"
                 />
                 <svg
@@ -192,9 +190,9 @@ export default function HomePage() {
                   onClick={() =>
                     setFilters((prev) => ({ ...prev, search: "" }))
                   }
-                  className="text-xs text-slate-400 hover:text-slate-600 px-2 py-1"
+                  className="text-xs text-slate-400 hover:text-slate-600 px-2 py-1 font-semibold"
                 >
-                  Xoá
+                  Clear
                 </button>
               )}
             </div>
@@ -202,8 +200,8 @@ export default function HomePage() {
 
           {/* Quick tags */}
           <div className="flex flex-wrap items-center justify-center gap-2 text-xs text-slate-400 pt-2">
-            <span className="text-slate-500 font-medium">Gợi ý tìm nhanh:</span>
-            {["Sơn Trà", "Hải Châu", "Căn hộ Studio", "Gác lửng"].map((tag) => (
+            <span className="text-slate-500 font-medium">Quick search:</span>
+            {["Son Tra", "Hai Chau", "Studio", "Mezzanine"].map((tag) => (
               <button
                 key={tag}
                 onClick={() =>
@@ -218,7 +216,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Main Content Area */}
+      {/* Main Content */}
       <main className="max-w-6xl mx-auto px-4 sm:px-6 -mt-6 pb-16 flex-1 relative z-20 w-full">
         {/* Component Filter */}
         {!loading && (
@@ -234,7 +232,7 @@ export default function HomePage() {
         {loading && (
           <div className="py-20 text-center text-slate-500 flex flex-col items-center justify-center gap-3">
             <div className="w-8 h-8 border-3 border-sky-600 border-t-transparent rounded-full animate-spin"></div>
-            <p className="text-sm font-medium">Đang tải danh sách phòng trọ...</p>
+            <p className="text-sm font-medium">Loading rental listings...</p>
           </div>
         )}
 
@@ -257,30 +255,30 @@ export default function HomePage() {
               </svg>
             </div>
             <h3 className="text-slate-900 font-bold text-base mb-1">
-              Không tìm thấy phòng phù hợp
+              No matching properties found
             </h3>
             <p className="text-slate-500 text-sm max-w-md mx-auto mb-5">
-              Thử tìm kiếm với từ khoá khác hoặc nhấn nút bên dưới để xem tất cả phòng.
+              Try searching with different keywords or reset your filters.
             </p>
             <button
               onClick={() => setFilters(initialFilters)}
               className="bg-sky-600 hover:bg-sky-700 text-white font-semibold text-xs px-5 py-2.5 rounded-xl transition shadow-sm"
             >
-              Xem tất cả danh sách
+              Reset All Filters
             </button>
           </div>
         )}
 
-        {/* Room Grid */}
+        {/* Property Grid */}
         {!loading && filteredRooms.length > 0 && (
           <>
             <div className="flex items-center justify-between mb-4">
               <p className="text-xs sm:text-sm font-semibold text-slate-600">
-                Tìm thấy{" "}
+                Found{" "}
                 <span className="text-sky-600 font-bold">
                   {filteredRooms.length}
                 </span>{" "}
-                phòng khả dụng
+                available properties
               </p>
             </div>
 
@@ -302,11 +300,11 @@ export default function HomePage() {
                       />
                     ) : (
                       <div className="w-full h-full flex items-center justify-center text-slate-400 text-xs font-medium">
-                        Chưa có ảnh
+                        No photos available
                       </div>
                     )}
 
-                    {/* Status Badge Positioned Top Left */}
+                    {/* Status Badge */}
                     <div className="absolute top-3 left-3">
                       <span
                         className={`text-[11px] px-2.5 py-1 rounded-lg backdrop-blur-md shadow-sm font-semibold ${STATUS_COLORS[room.status]}`}
@@ -315,18 +313,18 @@ export default function HomePage() {
                       </span>
                     </div>
 
-                    {/* Specs Pill Positioned Bottom Right */}
+                    {/* Specs Pill */}
                     <div className="absolute bottom-3 right-3 bg-slate-900/75 text-white text-[11px] px-2.5 py-1 rounded-lg backdrop-blur-md font-medium">
                       {room.area} m²
                     </div>
                   </div>
 
-                  {/* Room Details Card Body */}
+                  {/* Card Content */}
                   <div className="p-4 sm:p-5 flex-1 flex flex-col justify-between space-y-3">
                     <div>
-                      {/* Sub-header: District & Type */}
+                      {/* Sub-header: District & Property Type */}
                       <div className="flex items-center gap-2 text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">
-                        <span>Quận {room.district}</span>
+                        <span>{room.district} District</span>
                         {room.room_type && (
                           <>
                             <span>•</span>
@@ -369,18 +367,18 @@ export default function HomePage() {
                     <div className="pt-3 border-t border-slate-100 flex items-center justify-between">
                       <div>
                         <span className="text-[10px] text-slate-400 font-medium block uppercase tracking-wider">
-                          Giá thuê
+                          Monthly Rent
                         </span>
                         <span className="text-base sm:text-lg font-extrabold text-rose-600">
-                          {room.price.toLocaleString("vi-VN")}đ
+                          {room.price.toLocaleString("en-US")} VND
                           <span className="text-xs font-normal text-slate-500">
-                            /tháng
+                            /mo
                           </span>
                         </span>
                       </div>
 
                       <span className="text-xs text-sky-600 group-hover:text-sky-700 font-bold flex items-center gap-1 group-hover:translate-x-0.5 transition">
-                        Chi tiết →
+                        View Details →
                       </span>
                     </div>
                   </div>
@@ -391,33 +389,32 @@ export default function HomePage() {
         )}
       </main>
 
-      {/* Footer Chuyên Nghiệp */}
+      {/* Footer */}
       <footer className="bg-slate-900 text-slate-400 py-12 px-4 sm:px-6 border-t border-slate-800">
         <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 text-sm">
           <div>
             <div className="flex items-center gap-2 mb-3">
               <div className="w-7 h-7 rounded-lg bg-sky-500 text-white flex items-center justify-center font-bold text-sm">
-                ĐN
+                DN
               </div>
               <span className="font-bold text-white text-base">
-                ĐÀ NẴNG HOMES
+                DA NANG HOMES
               </span>
             </div>
             <p className="text-slate-400 text-xs leading-relaxed max-w-xs">
-              Hệ thống tìm kiếm phòng trọ & căn hộ cho thuê uy tín tại các quận
-              trung tâm và khu vực ven biển Đà Nẵng.
+              Trusted long-term & short-term room and apartment rental consultant for expats, foreigners, and locals in Da Nang.
             </p>
           </div>
 
           <div>
             <h4 className="font-bold text-white mb-3 text-xs uppercase tracking-wider">
-              Tư vấn trực tiếp
+              Direct Contact
             </h4>
             <p className="text-xs text-slate-300 font-semibold mb-1">
               {CONTACT_CONFIG.ownerName}
             </p>
             <p className="text-xs text-slate-400">
-              Hotline/Zalo:{" "}
+              Hotline/Zalo/WhatsApp:{" "}
               <a
                 href={`tel:${CONTACT_CONFIG.phone}`}
                 className="text-sky-400 underline font-semibold"
@@ -429,16 +426,16 @@ export default function HomePage() {
 
           <div>
             <h4 className="font-bold text-white mb-3 text-xs uppercase tracking-wider">
-              Khu vực hỗ trợ
+              Service Areas
             </h4>
             <p className="text-xs text-slate-400 leading-relaxed">
-              Hải Châu • Sơn Trà • Ngũ Hành Sơn • Thanh Khê • Liên Chiểu • Cẩm Lệ
+              Hai Chau • Son Tra • Ngu Hanh Son • Thanh Khe • Lien Chieu • Cam Le
             </p>
           </div>
         </div>
 
         <div className="max-w-6xl mx-auto pt-8 mt-8 border-t border-slate-800/80 text-center text-xs text-slate-500">
-          © {new Date().getFullYear()} Đà Nẵng Homes. Tất cả thông tin phòng được cập nhật chính xác thực tế.
+          © {new Date().getFullYear()} Da Nang Homes. All room information verified.
         </div>
       </footer>
     </div>

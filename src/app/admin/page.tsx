@@ -31,7 +31,9 @@ export default function AdminPage() {
   }, [fetchRooms]);
 
   async function handleDelete(id: string, title: string) {
-    const confirmed = window.confirm(`Xoá phòng "${title}"? Hành động này không thể hoàn tác.`);
+    const confirmed = window.confirm(
+      `Delete property "${title}"? This action cannot be undone.`
+    );
     if (!confirmed) return;
 
     setDeletingId(id);
@@ -39,7 +41,7 @@ export default function AdminPage() {
     setDeletingId(null);
 
     if (error) {
-      alert(`Lỗi khi xoá: ${error.message}`);
+      alert(`Error deleting property: ${error.message}`);
       return;
     }
     setRooms((prev) => prev.filter((r) => r.id !== id));
@@ -50,29 +52,29 @@ export default function AdminPage() {
       <div className="flex items-center justify-between mb-8">
         <div>
           <h1 className="text-2xl font-bold text-slate-900">
-            Quản lý danh sách phòng cho thuê
+            Manage Property Listings
           </h1>
           <p className="text-slate-500 text-sm mt-1">
-            {loading ? "Đang tải dữ liệu..." : `Hiện có ${rooms.length} phòng trong danh sách`}
+            {loading ? "Loading listings..." : `Total ${rooms.length} properties listed`}
           </p>
         </div>
         <Link
           href="/admin/new"
           className="bg-sky-600 hover:bg-sky-700 text-white font-semibold px-4 py-2.5 rounded-xl shadow-sm transition text-sm flex items-center gap-1.5"
         >
-          <span>+ Thêm phòng mới</span>
+          <span>+ Add New Property</span>
         </Link>
       </div>
 
       {error && (
         <div className="bg-rose-50 text-rose-700 border border-rose-200 rounded-xl px-4 py-3 text-sm mb-6">
-          Lỗi tải dữ liệu: {error}
+          Failed to load data: {error}
         </div>
       )}
 
       {!loading && rooms.length === 0 && !error && (
         <div className="text-center py-16 bg-white border border-slate-200 rounded-2xl text-slate-500">
-          Chưa có phòng nào. Nhấn &quot;Thêm phòng mới&quot; để bắt đầu.
+          No properties listed yet. Click &quot;Add New Property&quot; to begin.
         </div>
       )}
 
@@ -91,7 +93,7 @@ export default function AdminPage() {
               />
             ) : (
               <div className="w-20 h-20 rounded-xl bg-slate-100 flex items-center justify-center text-slate-400 text-xs flex-shrink-0 font-medium">
-                Không ảnh
+                No photo
               </div>
             )}
 
@@ -107,9 +109,9 @@ export default function AdminPage() {
                 </span>
               </div>
               <p className="text-sm text-slate-500 truncate">
-                Quận {room.district} · {room.area} m² ·{" "}
+                {room.district} District · {room.area} m² ·{" "}
                 <span className="font-bold text-rose-600">
-                  {room.price.toLocaleString("vi-VN")}đ/tháng
+                  {room.price.toLocaleString("en-US")} VND/mo
                 </span>
               </p>
               <p className="text-xs text-slate-400 mt-0.5 truncate">
@@ -123,20 +125,20 @@ export default function AdminPage() {
                 target="_blank"
                 className="px-3 py-1.5 text-xs font-semibold text-slate-600 border border-slate-200 rounded-lg hover:bg-slate-50 transition hidden sm:inline"
               >
-                Xem
+                View
               </Link>
               <Link
                 href={`/admin/${room.id}/edit`}
                 className="px-3 py-1.5 text-xs font-semibold border border-slate-200 text-slate-700 rounded-lg hover:bg-slate-50 transition"
               >
-                Sửa
+                Edit
               </Link>
               <button
                 onClick={() => handleDelete(room.id, room.title)}
                 disabled={deletingId === room.id}
                 className="px-3 py-1.5 text-xs font-semibold border border-rose-200 text-rose-600 rounded-lg hover:bg-rose-50 transition disabled:opacity-50"
               >
-                {deletingId === room.id ? "Đang xoá..." : "Xoá"}
+                {deletingId === room.id ? "Deleting..." : "Delete"}
               </button>
             </div>
           </div>
