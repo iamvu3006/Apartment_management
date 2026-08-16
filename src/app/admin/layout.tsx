@@ -19,7 +19,6 @@ export default function AdminLayout({
   const isLoginPage = pathname === "/admin/login";
 
   useEffect(() => {
-    // Kiểm tra session hiện tại
     supabase.auth.getSession().then(({ data: { session } }) => {
       if (session) {
         setAuthenticated(true);
@@ -37,7 +36,6 @@ export default function AdminLayout({
       setLoading(false);
     });
 
-    // Đăng ký lắng nghe thay đổi trạng thái Auth
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((_event, session) => {
@@ -69,9 +67,9 @@ export default function AdminLayout({
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-stone-50 text-stone-500">
+      <div className="min-h-screen flex items-center justify-center bg-slate-50 text-slate-500">
         <div className="flex items-center gap-3">
-          <div className="w-5 h-5 border-2 border-orange-600 border-t-transparent rounded-full animate-spin"></div>
+          <div className="w-5 h-5 border-2 border-sky-600 border-t-transparent rounded-full animate-spin"></div>
           <p className="text-sm font-medium">Đang xác thực quyền truy cập...</p>
         </div>
       </div>
@@ -87,21 +85,21 @@ export default function AdminLayout({
   }
 
   return (
-    <div className="min-h-screen bg-stone-50 flex flex-col">
-      <header className="bg-white border-b border-stone-200 sticky top-0 z-10">
+    <div className="min-h-screen bg-slate-50 flex flex-col">
+      <header className="bg-slate-900 text-white sticky top-0 z-10 shadow-sm border-b border-slate-800">
         <div className="max-w-5xl mx-auto px-6 h-16 flex items-center justify-between">
           <div className="flex items-center gap-6">
             <Link
               href="/admin"
-              className="font-bold text-lg text-stone-900 flex items-center gap-2"
+              className="font-bold text-base text-white flex items-center gap-2"
             >
-              <span className="w-3 h-3 rounded-full bg-orange-600"></span>
+              <span className="w-3 h-3 rounded-full bg-sky-500"></span>
               Admin Control
             </Link>
             <Link
               href="/"
               target="_blank"
-              className="text-xs text-stone-500 hover:text-stone-800 transition flex items-center gap-1"
+              className="text-xs text-slate-400 hover:text-white transition flex items-center gap-1"
             >
               <span>Xem trang public ↗</span>
             </Link>
@@ -109,13 +107,13 @@ export default function AdminLayout({
 
           <div className="flex items-center gap-4">
             {userEmail && (
-              <span className="text-xs text-stone-500 hidden sm:inline">
+              <span className="text-xs text-slate-400 hidden sm:inline font-mono">
                 {userEmail}
               </span>
             )}
             <button
               onClick={handleLogout}
-              className="text-xs text-stone-600 hover:text-red-600 px-3 py-1.5 rounded-md border border-stone-200 hover:border-red-200 transition"
+              className="text-xs text-slate-300 hover:text-rose-400 px-3 py-1.5 rounded-lg border border-slate-700 hover:border-rose-400/50 transition font-medium"
             >
               Đăng xuất
             </button>

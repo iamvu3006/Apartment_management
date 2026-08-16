@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo } from "react";
-import { Room, RoomStatus } from "@/types/room";
+import { Room } from "@/types/room";
 
 export interface FilterState {
   search: string;
@@ -32,7 +32,6 @@ export default function RoomFilter({
   onFilterChange,
   onReset,
 }: RoomFilterProps) {
-  // Trích xuất danh sách Quận và Loại phòng thực tế từ dữ liệu
   const availableDistricts = useMemo(() => {
     const districts = new Set<string>();
     rooms.forEach((r) => {
@@ -64,121 +63,18 @@ export default function RoomFilter({
     filters.status !== "all";
 
   return (
-    <div className="bg-white border border-stone-200 rounded-2xl p-4 sm:p-5 shadow-sm mb-8 space-y-4">
-      {/* Ô tìm kiếm từ khoá */}
-      <div className="relative">
-        <input
-          type="text"
-          value={filters.search}
-          onChange={(e) => handleChange("search", e.target.value)}
-          placeholder="Tìm kiếm theo tiêu đề, địa chỉ..."
-          className="w-full pl-10 pr-4 py-2.5 bg-stone-50 border border-stone-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-orange-500 focus:bg-white transition"
-        />
-        <svg
-          className="w-4 h-4 text-stone-400 absolute left-3.5 top-1/2 -translate-y-1/2"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-          />
-        </svg>
-        {filters.search && (
-          <button
-            onClick={() => handleChange("search", "")}
-            className="absolute right-3 top-1/2 -translate-y-1/2 text-stone-400 hover:text-stone-600 text-xs font-bold bg-stone-200 rounded-full w-5 h-5 flex items-center justify-center"
-          >
-            ×
-          </button>
-        )}
-      </div>
-
-      {/* Lưới các bộ lọc Dropdown */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-        {/* Lọc Theo Khoảng Giá */}
-        <div>
-          <label className="block text-xs font-medium text-stone-500 mb-1">
-            Mức giá
-          </label>
-          <select
-            value={filters.priceRange}
-            onChange={(e) => handleChange("priceRange", e.target.value)}
-            className="w-full py-2 px-3 bg-stone-50 border border-stone-200 rounded-xl text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-orange-500 focus:bg-white transition"
-          >
-            {PRICE_RANGES.map((range) => (
-              <option key={range.value} value={range.value}>
-                {range.label}
-              </option>
-            ))}
-          </select>
+    <div className="bg-white border border-slate-200/80 rounded-2xl p-5 shadow-sm space-y-4">
+      <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+        <div className="flex items-center gap-2">
+          <div className="w-2 h-2 rounded-full bg-sky-600"></div>
+          <h2 className="text-sm font-bold text-slate-800 tracking-tight">
+            Bộ lọc tìm kiếm
+          </h2>
         </div>
-
-        {/* Lọc Theo Quận / Khu vực */}
-        <div>
-          <label className="block text-xs font-medium text-stone-500 mb-1">
-            Khu vực / Quận
-          </label>
-          <select
-            value={filters.district}
-            onChange={(e) => handleChange("district", e.target.value)}
-            className="w-full py-2 px-3 bg-stone-50 border border-stone-200 rounded-xl text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-orange-500 focus:bg-white transition"
-          >
-            <option value="all">Tất cả khu vực</option>
-            {availableDistricts.map((d) => (
-              <option key={d} value={d}>
-                {d}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        {/* Lọc Theo Loại Phòng */}
-        <div>
-          <label className="block text-xs font-medium text-stone-500 mb-1">
-            Loại phòng
-          </label>
-          <select
-            value={filters.roomType}
-            onChange={(e) => handleChange("roomType", e.target.value)}
-            className="w-full py-2 px-3 bg-stone-50 border border-stone-200 rounded-xl text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-orange-500 focus:bg-white transition"
-          >
-            <option value="all">Tất cả loại phòng</option>
-            {availableRoomTypes.map((t) => (
-              <option key={t} value={t}>
-                {t}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        {/* Lọc Theo Trạng Thái */}
-        <div>
-          <label className="block text-xs font-medium text-stone-500 mb-1">
-            Trạng thái
-          </label>
-          <select
-            value={filters.status}
-            onChange={(e) => handleChange("status", e.target.value)}
-            className="w-full py-2 px-3 bg-stone-50 border border-stone-200 rounded-xl text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-orange-500 focus:bg-white transition"
-          >
-            <option value="all">Tất cả trạng thái</option>
-            <option value="trong">Còn trống</option>
-            <option value="da_coc">Đã cọc</option>
-            <option value="da_thue">Đã cho thuê</option>
-          </select>
-        </div>
-      </div>
-
-      {/* Nút xoá bộ lọc */}
-      {isFiltered && (
-        <div className="flex justify-end pt-1">
+        {isFiltered && (
           <button
             onClick={onReset}
-            className="text-xs text-orange-600 hover:text-orange-700 font-medium flex items-center gap-1 transition"
+            className="text-xs text-sky-600 hover:text-sky-700 font-semibold flex items-center gap-1 transition"
           >
             <svg
               className="w-3.5 h-3.5"
@@ -193,10 +89,86 @@ export default function RoomFilter({
                 d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
               />
             </svg>
-            Đặt lại bộ lọc
+            Đặt lại
           </button>
+        )}
+      </div>
+
+      {/* Grid điều khiển lọc */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5">
+        {/* Lọc Theo Khoảng Giá */}
+        <div>
+          <label className="block text-xs font-semibold text-slate-600 mb-1">
+            Mức giá thuê
+          </label>
+          <select
+            value={filters.priceRange}
+            onChange={(e) => handleChange("priceRange", e.target.value)}
+            className="w-full py-2.5 px-3 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:bg-white transition"
+          >
+            {PRICE_RANGES.map((range) => (
+              <option key={range.value} value={range.value}>
+                {range.label}
+              </option>
+            ))}
+          </select>
         </div>
-      )}
+
+        {/* Lọc Theo Khu Vực */}
+        <div>
+          <label className="block text-xs font-semibold text-slate-600 mb-1">
+            Quận / Khu vực
+          </label>
+          <select
+            value={filters.district}
+            onChange={(e) => handleChange("district", e.target.value)}
+            className="w-full py-2.5 px-3 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:bg-white transition"
+          >
+            <option value="all">Tất cả khu vực</option>
+            {availableDistricts.map((d) => (
+              <option key={d} value={d}>
+                Quận {d}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        {/* Lọc Theo Loại Phòng */}
+        <div>
+          <label className="block text-xs font-semibold text-slate-600 mb-1">
+            Loại phòng
+          </label>
+          <select
+            value={filters.roomType}
+            onChange={(e) => handleChange("roomType", e.target.value)}
+            className="w-full py-2.5 px-3 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:bg-white transition"
+          >
+            <option value="all">Tất cả loại hình</option>
+            {availableRoomTypes.map((t) => (
+              <option key={t} value={t}>
+                {t}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        {/* Lọc Theo Trạng Thái */}
+        <div>
+          <label className="block text-xs font-semibold text-slate-600 mb-1">
+            Trạng thái phòng
+          </label>
+          <select
+            value={filters.status}
+            onChange={(e) => handleChange("status", e.target.value)}
+            className="w-full py-2.5 px-3 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:bg-white transition"
+          >
+            <option value="all">Tất cả trạng thái</option>
+            <option value="trong">🟢 Còn trống</option>
+            <option value="da_coc">🟡 Đã cọc</option>
+            <option value="da_thue">⚪ Đã cho thuê</option>
+          </select>
+        </div>
+      </div>
     </div>
   );
 }

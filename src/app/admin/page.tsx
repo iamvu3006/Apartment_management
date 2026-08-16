@@ -49,28 +49,30 @@ export default function AdminPage() {
     <div className="max-w-5xl mx-auto px-6 py-10">
       <div className="flex items-center justify-between mb-8">
         <div>
-          <h1 className="text-2xl font-semibold">Quản lý phòng cho thuê</h1>
-          <p className="text-stone-500 text-sm mt-1">
-            {loading ? "Đang tải..." : `${rooms.length} phòng`}
+          <h1 className="text-2xl font-bold text-slate-900">
+            Quản lý danh sách phòng cho thuê
+          </h1>
+          <p className="text-slate-500 text-sm mt-1">
+            {loading ? "Đang tải dữ liệu..." : `Hiện có ${rooms.length} phòng trong danh sách`}
           </p>
         </div>
         <Link
           href="/admin/new"
-          className="bg-orange-600 hover:bg-orange-700 text-white font-medium px-4 py-2.5 rounded-lg transition"
+          className="bg-sky-600 hover:bg-sky-700 text-white font-semibold px-4 py-2.5 rounded-xl shadow-sm transition text-sm flex items-center gap-1.5"
         >
-          + Thêm phòng mới
+          <span>+ Thêm phòng mới</span>
         </Link>
       </div>
 
       {error && (
-        <div className="bg-red-50 text-red-700 border border-red-200 rounded-lg px-4 py-3 text-sm mb-6">
+        <div className="bg-rose-50 text-rose-700 border border-rose-200 rounded-xl px-4 py-3 text-sm mb-6">
           Lỗi tải dữ liệu: {error}
         </div>
       )}
 
       {!loading && rooms.length === 0 && !error && (
-        <div className="text-center py-16 text-stone-500">
-          Chưa có phòng nào. Bấm &quot;Thêm phòng mới&quot; để bắt đầu.
+        <div className="text-center py-16 bg-white border border-slate-200 rounded-2xl text-slate-500">
+          Chưa có phòng nào. Nhấn &quot;Thêm phòng mới&quot; để bắt đầu.
         </div>
       )}
 
@@ -78,47 +80,61 @@ export default function AdminPage() {
         {rooms.map((room) => (
           <div
             key={room.id}
-            className="flex items-center gap-4 bg-white border border-stone-200 rounded-xl p-4"
+            className="flex items-center gap-4 bg-white border border-slate-200/80 rounded-2xl p-4 shadow-sm hover:shadow-md transition"
           >
             {room.images[0] ? (
               // eslint-disable-next-line @next/next/no-img-element
               <img
                 src={room.images[0]}
                 alt={room.title}
-                className="w-20 h-20 object-cover rounded-lg flex-shrink-0"
+                className="w-20 h-20 object-cover rounded-xl flex-shrink-0 bg-slate-100"
               />
             ) : (
-              <div className="w-20 h-20 rounded-lg bg-stone-100 flex items-center justify-center text-stone-400 text-xs flex-shrink-0">
+              <div className="w-20 h-20 rounded-xl bg-slate-100 flex items-center justify-center text-slate-400 text-xs flex-shrink-0 font-medium">
                 Không ảnh
               </div>
             )}
 
             <div className="flex-1 min-w-0">
-              <div className="flex items-center gap-2">
-                <h2 className="font-medium truncate">{room.title}</h2>
+              <div className="flex items-center gap-2 mb-1">
+                <h2 className="font-bold text-slate-900 truncate text-base">
+                  {room.title}
+                </h2>
                 <span
-                  className={`text-xs px-2 py-0.5 rounded-full whitespace-nowrap ${STATUS_COLORS[room.status]}`}
+                  className={`text-xs px-2.5 py-0.5 rounded-lg whitespace-nowrap ${STATUS_COLORS[room.status]}`}
                 >
                   {STATUS_LABELS[room.status]}
                 </span>
               </div>
-              <p className="text-sm text-stone-500 mt-0.5 truncate">
-                {room.address}, {room.district} · {room.area}m² ·{" "}
-                {room.price.toLocaleString("vi-VN")}đ/tháng
+              <p className="text-sm text-slate-500 truncate">
+                Quận {room.district} · {room.area} m² ·{" "}
+                <span className="font-bold text-rose-600">
+                  {room.price.toLocaleString("vi-VN")}đ/tháng
+                </span>
+              </p>
+              <p className="text-xs text-slate-400 mt-0.5 truncate">
+                {room.address}
               </p>
             </div>
 
-            <div className="flex gap-2 flex-shrink-0">
+            <div className="flex items-center gap-2 flex-shrink-0">
+              <Link
+                href={`/phong/${room.id}`}
+                target="_blank"
+                className="px-3 py-1.5 text-xs font-semibold text-slate-600 border border-slate-200 rounded-lg hover:bg-slate-50 transition hidden sm:inline"
+              >
+                Xem
+              </Link>
               <Link
                 href={`/admin/${room.id}/edit`}
-                className="px-3 py-1.5 text-sm border border-stone-300 rounded-lg hover:bg-stone-100 transition"
+                className="px-3 py-1.5 text-xs font-semibold border border-slate-200 text-slate-700 rounded-lg hover:bg-slate-50 transition"
               >
                 Sửa
               </Link>
               <button
                 onClick={() => handleDelete(room.id, room.title)}
                 disabled={deletingId === room.id}
-                className="px-3 py-1.5 text-sm border border-red-200 text-red-600 rounded-lg hover:bg-red-50 transition disabled:opacity-50"
+                className="px-3 py-1.5 text-xs font-semibold border border-rose-200 text-rose-600 rounded-lg hover:bg-rose-50 transition disabled:opacity-50"
               >
                 {deletingId === room.id ? "Đang xoá..." : "Xoá"}
               </button>

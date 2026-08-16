@@ -137,7 +137,7 @@ export default function RoomForm({ initialData }: RoomFormProps) {
           value={form.title}
           onChange={(e) => handleChange("title", e.target.value)}
           placeholder="VD: Phòng trọ gác lửng gần cầu Rồng"
-          className="w-full rounded-lg border border-stone-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-orange-400"
+          className="w-full rounded-lg border border-stone-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-sky-500"
         />
       </div>
 
@@ -150,7 +150,7 @@ export default function RoomForm({ initialData }: RoomFormProps) {
             min={0}
             value={form.price}
             onChange={(e) => handleChange("price", Number(e.target.value))}
-            className="w-full rounded-lg border border-stone-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-orange-400"
+            className="w-full rounded-lg border border-stone-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-sky-500"
           />
         </div>
         <div>
@@ -161,7 +161,7 @@ export default function RoomForm({ initialData }: RoomFormProps) {
             min={0}
             value={form.area}
             onChange={(e) => handleChange("area", Number(e.target.value))}
-            className="w-full rounded-lg border border-stone-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-orange-400"
+            className="w-full rounded-lg border border-stone-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-sky-500"
           />
         </div>
       </div>
@@ -174,7 +174,7 @@ export default function RoomForm({ initialData }: RoomFormProps) {
           value={form.address}
           onChange={(e) => handleChange("address", e.target.value)}
           placeholder="Số nhà, đường..."
-          className="w-full rounded-lg border border-stone-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-orange-400"
+          className="w-full rounded-lg border border-stone-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-sky-500"
         />
       </div>
 
@@ -187,7 +187,7 @@ export default function RoomForm({ initialData }: RoomFormProps) {
             value={form.district}
             onChange={(e) => handleChange("district", e.target.value)}
             placeholder="VD: Hải Châu"
-            className="w-full rounded-lg border border-stone-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-orange-400"
+            className="w-full rounded-lg border border-stone-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-sky-500"
           />
         </div>
         <div>
@@ -198,7 +198,7 @@ export default function RoomForm({ initialData }: RoomFormProps) {
             value={form.room_type}
             onChange={(e) => handleChange("room_type", e.target.value)}
             placeholder="VD: Chung cư mini"
-            className="w-full rounded-lg border border-stone-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-orange-400"
+            className="w-full rounded-lg border border-stone-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-sky-500"
           />
         </div>
       </div>
@@ -208,7 +208,7 @@ export default function RoomForm({ initialData }: RoomFormProps) {
         <select
           value={form.status}
           onChange={(e) => handleChange("status", e.target.value as RoomStatus)}
-          className="w-full rounded-lg border border-stone-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-orange-400"
+          className="w-full rounded-lg border border-stone-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-sky-500"
         >
           <option value="trong">Còn trống</option>
           <option value="da_coc">Đã cọc</option>
@@ -223,7 +223,7 @@ export default function RoomForm({ initialData }: RoomFormProps) {
           value={form.description ?? ""}
           onChange={(e) => handleChange("description", e.target.value)}
           placeholder="Tiện ích, giờ giấc, nội thất..."
-          className="w-full rounded-lg border border-stone-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-orange-400"
+          className="w-full rounded-lg border border-stone-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-sky-500"
         />
       </div>
 
@@ -270,7 +270,7 @@ export default function RoomForm({ initialData }: RoomFormProps) {
         <button
           type="submit"
           disabled={uploading}
-          className="bg-orange-600 hover:bg-orange-700 disabled:bg-orange-300 text-white font-medium px-5 py-2.5 rounded-lg transition"
+          className="bg-sky-600 hover:bg-sky-700 disabled:bg-sky-300 text-white font-medium px-5 py-2.5 rounded-lg transition"
         >
           {uploading ? "Đang lưu..." : isEditMode ? "Lưu thay đổi" : "Thêm phòng"}
         </button>

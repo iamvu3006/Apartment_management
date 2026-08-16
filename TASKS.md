@@ -17,12 +17,12 @@
   - [x] Bộ lọc client-side theo khoảng giá, khu vực (quận), loại phòng, trạng thái
   - [x] Ô tìm kiếm từ khoá tiêu đề / địa chỉ
 
-- [ ] **Task 4: Thiết kế lại giao diện cho chuyên nghiệp**
-  - [ ] Chốt hướng thiết kế trước khi code: bảng màu (4-6 mã hex có tên), font heading/body — tránh 3 kiểu AI mặc định (be/serif/cam đất, đen/neon, báo/kẻ mảnh)
-  - [ ] Import Google Font (ví dụ: Be Vietnam Pro / Plus Jakarta Sans)
-  - [ ] Thêm phần Hero giới thiệu ấn tượng ở trang chủ
-  - [ ] Thiết kế lại Room Card, Badge trạng thái, Header/Footer
-  - [ ] Đảm bảo mobile-first và responsive hoàn hảo
+- [x] **Task 4: Thiết kế lại giao diện cho chuyên nghiệp**
+  - [x] Chốt hướng thiết kế trước khi code: bảng màu (Navy Deep `#0F172A`, Ocean Teal `#0284C7`, Sunset Rose `#E11D48`, Slate Bg `#F8FAFC`), font Be Vietnam Pro
+  - [x] Import Google Font Be Vietnam Pro hỗ trợ chuẩn tiếng Việt
+  - [x] Thêm phần Hero giới thiệu ấn tượng ở trang chủ với thanh tìm kiếm nhanh
+  - [x] Thiết kế lại Room Card, Badge trạng thái overlay, Header/Footer chuyên nghiệp
+  - [x] Đảm bảo mobile-first và responsive hoàn hảo
 
 - [ ] **Task 5: Chuẩn bị deploy Vercel**
   - [ ] Kiểm tra build production (`npm run build`) không có lỗi ESLint/TypeScript

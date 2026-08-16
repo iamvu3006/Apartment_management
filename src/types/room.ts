@@ -24,7 +24,7 @@ export const STATUS_LABELS: Record<RoomStatus, string> = {
 };
 
 export const STATUS_COLORS: Record<RoomStatus, string> = {
-  trong: "bg-emerald-100 text-emerald-700",
-  da_coc: "bg-amber-100 text-amber-700",
-  da_thue: "bg-slate-200 text-slate-600",
+  trong: "bg-emerald-50 text-emerald-700 border border-emerald-200/60 font-medium",
+  da_coc: "bg-amber-50 text-amber-700 border border-amber-200/60 font-medium",
+  da_thue: "bg-slate-100 text-slate-600 border border-slate-200 font-medium",
 };
