@@ -5,7 +5,6 @@ import Link from "next/link";
 import { supabase } from "@/lib/supabase";
 import { Room, STATUS_LABELS, STATUS_COLORS } from "@/types/room";
 import RoomFilter, { FilterState } from "@/components/RoomFilter";
-import RoomMap from "@/components/RoomMap";
 import { CONTACT_CONFIG } from "@/config/contact";
 import { useApp, LANGUAGES, Language } from "@/context/AppContext";
 
@@ -23,7 +22,6 @@ export default function HomePage() {
   const [rooms, setRooms] = useState<Room[]>([]);
   const [loading, setLoading] = useState(true);
   const [filters, setFilters] = useState<FilterState>(initialFilters);
-  const [viewMode, setViewMode] = useState<"grid" | "map">("grid");
 
   const {
     currency,
@@ -320,7 +318,7 @@ export default function HomePage() {
           </div>
         )}
 
-        {/* Controls: Mode Switcher (Grid View | Map View) */}
+        {/* Results Counter & Property Grid */}
         {!loading && filteredRooms.length > 0 && (
           <>
             <div className="flex items-center justify-between mb-4">
@@ -331,40 +329,9 @@ export default function HomePage() {
                 </span>{" "}
                 available properties
               </p>
-
-              {/* Grid / Map Toggle Buttons */}
-              <div className="flex items-center bg-slate-200 p-1 rounded-xl">
-                <button
-                  onClick={() => setViewMode("grid")}
-                  className={`px-3 py-1.5 rounded-lg text-xs font-bold transition ${
-                    viewMode === "grid"
-                      ? "bg-white text-slate-900 shadow-sm"
-                      : "text-slate-600 hover:text-slate-900"
-                  }`}
-                >
-                  {t.gridView}
-                </button>
-                <button
-                  onClick={() => setViewMode("map")}
-                  className={`px-3 py-1.5 rounded-lg text-xs font-bold transition ${
-                    viewMode === "map"
-                      ? "bg-sky-600 text-white shadow-sm"
-                      : "text-slate-600 hover:text-slate-900"
-                  }`}
-                >
-                  {t.mapView}
-                </button>
-              </div>
             </div>
 
-            {/* View Mode: MAP */}
-            {viewMode === "map" && (
-              <div className="mb-8">
-                <RoomMap rooms={filteredRooms} />
-              </div>
-            )}
-
-            {/* View Mode: GRID */}
+            {/* Property Cards Grid */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {filteredRooms.map((room) => {
                 const isFav = isFavorite(room.id);
