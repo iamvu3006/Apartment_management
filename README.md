@@ -1,36 +1,63 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Room Listing — Quản lý phòng cho thuê
 
-## Getting Started
+Web app thay thế Excel để quản lý danh sách phòng trọ/căn hộ cho thuê, kèm ảnh, và chia sẻ link cho khách xem trực tiếp.
 
-First, run the development server:
+## Tech stack
 
+- **Next.js 16** (App Router, Turbopack) + **TypeScript**
+- **Tailwind CSS v4**
+- **Supabase** — Postgres (database) + Storage (ảnh) + Auth (chưa dùng, sẽ thêm sau)
+- Deploy dự kiến: **Vercel**
+
+## Cấu trúc thư mục
+
+src/
+├── app/
+│ ├── page.tsx # Trang public — danh sách phòng
+│ ├── admin/
+│ │ ├── page.tsx # Dashboard admin — list + sửa/xoá
+│ │ ├── new/page.tsx # Form thêm phòng
+│ │ └── [id]/edit/page.tsx # Form sửa phòng
+├── components/
+│ └── RoomForm.tsx # Form dùng chung cho thêm/sửa (upload ảnh, validate)
+├── lib/
+│ └── supabase.ts # Supabase client (browser)
+└── types/
+└── room.ts # Type Room, RoomInput, labels trạng thái
+supabase/
+└── schema.sql # SQL tạo bảng rooms + bucket room-images + RLS policies
+
+
+## Setup
+
+1. Cài dependency:
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+   npm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. Tạo project Supabase mới → vào **SQL Editor** → chạy toàn bộ `supabase/schema.sql`.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+3. Tạo file `.env.local` ở thư mục gốc:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+NEXT_PUBLIC_SUPABASE_URL=<project-url>
+NEXT_PUBLIC_SUPABASE_ANON_KEY=<anon-hoặc-publishable-key>
 
-## Learn More
 
-To learn more about Next.js, take a look at the following resources:
+4. Chạy dev server:
+```bash
+   npm run dev
+```
+   Mở `http://localhost:3000` (trang public) và `http://localhost:3000/admin` (quản trị).
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Trạng thái hiện tại
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- ✅ CRUD phòng đầy đủ (Create/Read/Update/Delete) tại `/admin`
+- ✅ Upload nhiều ảnh lên Supabase Storage
+- ✅ Trang public hiển thị danh sách phòng dạng lưới
+- ❌ **`/admin` chưa có đăng nhập** — ai có link cũng sửa/xoá được (đang ở chế độ demo, RLS mở public tạm thời — xem comment trong `schema.sql`)
+- ❌ Chưa có filter/tìm kiếm (giá, khu vực, loại phòng)
+- ❌ Chưa có trang chi tiết từng phòng (`/phong/[id]`)
+- ❌ Chưa có nút liên hệ nhanh (gọi điện, Zalo, WhatsApp, Facebook)
+- ❌ Chưa deploy lên Vercel
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Xem `AGENTS.md` để biết chi tiết quy ước code và roadmap.
