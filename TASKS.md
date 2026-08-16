@@ -24,7 +24,7 @@
   - [x] Thiết kế lại Room Card, Badge trạng thái overlay, Header/Footer chuyên nghiệp
   - [x] Đảm bảo mobile-first và responsive hoàn hảo
 
-- [ ] **Task 5: Chuẩn bị deploy Vercel**
-  - [ ] Kiểm tra build production (`npm run build`) không có lỗi ESLint/TypeScript
-  - [ ] Liệt kê danh sách biến môi trường cho Vercel dashboard
-  - [ ] Hướng dẫn các bước deploy thủ công
+- [x] **Task 5: Chuẩn bị deploy Vercel**
+  - [x] Kiểm tra build production (`npm run build`) không có lỗi ESLint/TypeScript
+  - [x] Liệt kê danh sách biến môi trường cho Vercel dashboard (`.env.example`)
+  - [x] Hướng dẫn các bước deploy thủ công
