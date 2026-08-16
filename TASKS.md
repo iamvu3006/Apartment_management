@@ -24,13 +24,17 @@
   - [x] Thiết kế lại Room Card, Badge trạng thái overlay, Header/Footer chuyên nghiệp
   - [x] Đảm bảo mobile-first và responsive hoàn hảo
 
-- [x] **Task 5: Chuẩn bị deploy Vercel**
+- [x] **Task 5: Chuẩn bị deploy Vercel & Deploy thành công**
   - [x] Kiểm tra build production (`npm run build`) không có lỗi ESLint/TypeScript
   - [x] Liệt kê danh sách biến môi trường cho Vercel dashboard (`.env.example`)
-  - [x] Hướng dẫn các bước deploy thủ công
+  - [x] Deploy thành công trang web chạy 24/7 tại `https://apartment-management-topaz.vercel.app`
 
 - [x] **Task 6: Chuyển toàn bộ giao diện sang tiếng Anh (English Localization)**
   - [x] Chuyển đổi toàn bộ UI trang chủ public, Hero section, Room Card, Header & Footer sang tiếng Anh
   - [x] Chuyển đổi bộ lọc RoomFilter, nhãn trạng thái Availability (Available / Reserved / Rented), mức giá thuê sang tiếng Anh
   - [x] Chuyển đổi trang chi tiết phòng `/phong/[id]`, nút liên hệ nhanh và widget hỗ trợ sang tiếng Anh
   - [x] Chuyển đổi các trang Admin Control Dashboard & Form sang tiếng Anh
+
+- [x] **Task 7: Tạo tài liệu hướng dẫn sử dụng & Quản lý nhiều tài khoản Admin**
+  - [x] Viết file `USER_GUIDE.md` hướng dẫn chi tiết cách dùng web, thêm/sửa/xoá phòng và gửi link cho khách
+  - [x] Hướng dẫn cách tạo 2 hoặc nhiều tài khoản Admin quản lý phòng trong Supabase Dashboard
