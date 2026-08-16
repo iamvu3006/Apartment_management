@@ -1,72 +1,48 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { Room } from "@/types/room";
 import { useApp } from "@/context/AppContext";
+import { geocodeAddress } from "@/lib/geocoding";
 
 interface RoomMapInnerProps {
   rooms: Room[];
-}
-
-// Accurate coordinate mapping for Da Nang streets & districts
-function getRoomCoordinates(room: Room, index: number = 0): [number, number] {
-  const text = (room.address + " " + room.title + " " + room.district).toLowerCase();
-
-  // Deterministic micro-offset (~15 meters) so multiple units in the same building don't overlap completely
-  const offsetLat = ((index % 3) - 1) * 0.00018;
-  const offsetLng = Math.floor(index / 3) * 0.0002 - 0.0001;
-
-  // 1. Exact match for An Mỹ 7 (Son Tra, next to Dragon Bridge)
-  if (text.includes("an my 7") || text.includes("an mỹ 7") || text.includes("an my") || text.includes("an mỹ")) {
-    return [16.0625 + offsetLat, 108.2312 + offsetLng];
-  }
-
-  // 2. Exact match for Phạm Kiệt (Ngu Hanh Son, near beach)
-  if (text.includes("pham kiet") || text.includes("phạm kiệt")) {
-    return [16.0352 + offsetLat, 108.2435 + offsetLng];
-  }
-
-  // 3. Phước Mỹ (Son Tra beach area)
-  if (text.includes("phuoc my") || text.includes("phước mỹ")) {
-    return [16.0590 + offsetLat, 108.2420 + offsetLng];
-  }
-
-  // 4. Mỹ An / An Thượng (Ngu Hanh Son Expat quarter)
-  if (text.includes("my an") || text.includes("mỹ an") || text.includes("an thuong") || text.includes("an thượng")) {
-    return [16.0480 + offsetLat, 108.2420 + offsetLng];
-  }
-
-  // 5. General Son Tra district (near Dragon Bridge / Vo Van Kiet)
-  if (text.includes("son tra") || text.includes("sơn trà")) {
-    return [16.0620 + offsetLat, 108.2350 + offsetLng];
-  }
-
-  // 6. General Ngu Hanh Son district
-  if (text.includes("ngu hanh son") || text.includes("ngũ hành sơn")) {
-    return [16.0380 + offsetLat, 108.2430 + offsetLng];
-  }
-
-  // 7. General Hai Chau district (Downtown / Bach Dang)
-  if (text.includes("hai chau") || text.includes("hải châu")) {
-    return [16.0610 + offsetLat, 108.2220 + offsetLng];
-  }
-
-  // 8. General Thanh Khe district
-  if (text.includes("thanh khe") || text.includes("thanh khê")) {
-    return [16.0630 + offsetLat, 108.1980 + offsetLng];
-  }
-
-  // Fallback: Da Nang Dragon Bridge center
-  return [16.0600 + offsetLat, 108.2250 + offsetLng];
 }
 
 export default function RoomMapInner({ rooms }: RoomMapInnerProps) {
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const mapInstanceRef = useRef<L.Map | null>(null);
   const { currency, formatPrice, t } = useApp();
+  const [coordsMap, setCoordsMap] = useState<Record<string, [number, number]>>({});
 
+  // 1. Geocode all room addresses asynchronously
+  useEffect(() => {
+    let isMounted = true;
+
+    async function resolveCoordinates() {
+      const newMap: Record<string, [number, number]> = {};
+
+      for (let i = 0; i < rooms.length; i++) {
+        const room = rooms[i];
+        const coords = await geocodeAddress(room.address || room.title, room.district, i);
+        newMap[room.id] = coords;
+      }
+
+      if (isMounted) {
+        setCoordsMap(newMap);
+      }
+    }
+
+    resolveCoordinates();
+
+    return () => {
+      isMounted = false;
+    };
+  }, [rooms]);
+
+  // 2. Render Leaflet Map & Price Pin Markers
   useEffect(() => {
     if (!mapContainerRef.current) return;
 
@@ -97,9 +73,11 @@ export default function RoomMapInner({ rooms }: RoomMapInnerProps) {
 
     const markersBounds: [number, number][] = [];
 
-    // Add accurate price pin markers for each room
-    rooms.forEach((room, index) => {
-      const coords = getRoomCoordinates(room, index);
+    // Add geocoded price pin markers for each room
+    rooms.forEach((room) => {
+      const coords = coordsMap[room.id];
+      if (!coords) return;
+
       markersBounds.push(coords);
 
       const priceText =
@@ -142,7 +120,7 @@ export default function RoomMapInner({ rooms }: RoomMapInnerProps) {
     if (markersBounds.length > 0) {
       map.fitBounds(markersBounds, { padding: [40, 40], maxZoom: 15 });
     }
-  }, [rooms, currency, formatPrice, t]);
+  }, [rooms, coordsMap, currency, formatPrice, t]);
 
   return (
     <div className="relative w-full h-[520px] rounded-2xl overflow-hidden border border-slate-200 shadow-sm z-10">
