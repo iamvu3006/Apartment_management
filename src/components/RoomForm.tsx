@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 import { Room, RoomInput, RoomStatus } from "@/types/room";
@@ -9,17 +9,65 @@ interface RoomFormProps {
   initialData?: Room;
 }
 
+export const DANANG_DISTRICTS = [
+  "Son Tra",
+  "Hai Chau",
+  "Ngu Hanh Son",
+  "Thanh Khe",
+  "Lien Chieu",
+  "Cam Le",
+  "Hoa Vang",
+  "Son Tra - Phuoc My",
+  "Son Tra - An Hai Bac",
+  "Son Tra - An Hai Tay",
+  "Son Tra - An Hai Dong",
+  "Son Tra - Tho Quang",
+  "Son Tra - Nai Hien Dong",
+  "Son Tra - Man Thai",
+  "Ngu Hanh Son - My An",
+  "Ngu Hanh Son - Khue My",
+  "Ngu Hanh Son - Hoa Hai",
+  "Hai Chau - Thach Thang",
+  "Hai Chau - Hoa Cuong Bac",
+  "Hai Chau - Hoa Cuong Nam",
+  "Hai Chau - Binh Thuan",
+  "Hai Chau - Phuoc Ninh",
+  "Thanh Khe - Xuan Ha",
+  "Thanh Khe - Chinh Gian",
+  "Thanh Khe - An Khe",
+];
+
+export const PROPERTY_TYPES = [
+  "Studio",
+  "1-Bedroom Apartment",
+  "2-Bedroom Apartment",
+  "Penthouse",
+];
+
 const emptyForm: RoomInput = {
   title: "",
   price: 0,
   area: 0,
   address: "",
-  district: "",
-  room_type: "",
+  district: "Son Tra",
+  room_type: "Studio",
   status: "trong",
   description: "",
   images: [],
 };
+
+// Format numeric value with dot thousands separator (e.g. 15.000.000)
+function formatNumberWithDots(val: number | string): string {
+  if (!val && val !== 0) return "";
+  const clean = String(val).replace(/\D/g, "");
+  if (!clean) return "";
+  return Number(clean).toLocaleString("vi-VN");
+}
+
+function parseDotsToNumber(val: string): number {
+  const clean = val.replace(/\D/g, "");
+  return clean ? Number(clean) : 0;
+}
 
 export default function RoomForm({ initialData }: RoomFormProps) {
   const router = useRouter();
@@ -32,13 +80,18 @@ export default function RoomForm({ initialData }: RoomFormProps) {
           price: initialData.price,
           area: initialData.area,
           address: initialData.address,
-          district: initialData.district,
-          room_type: initialData.room_type,
+          district: initialData.district || "Son Tra",
+          room_type: initialData.room_type || "Studio",
           status: initialData.status,
           description: initialData.description ?? "",
           images: initialData.images,
         }
       : emptyForm
+  );
+
+  // State to hold formatted price string with dots (e.g. "15.000.000")
+  const [formattedPrice, setFormattedPrice] = useState<string>(
+    initialData ? formatNumberWithDots(initialData.price) : ""
   );
 
   const [imageFiles, setImageFiles] = useState<File[]>([]);
@@ -48,8 +101,21 @@ export default function RoomForm({ initialData }: RoomFormProps) {
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  useEffect(() => {
+    if (initialData?.price) {
+      setFormattedPrice(formatNumberWithDots(initialData.price));
+    }
+  }, [initialData]);
+
   function handleChange<K extends keyof RoomInput>(key: K, value: RoomInput[K]) {
     setForm((prev) => ({ ...prev, [key]: value }));
+  }
+
+  function handlePriceInput(e: React.ChangeEvent<HTMLInputElement>) {
+    const rawVal = e.target.value;
+    const num = parseDotsToNumber(rawVal);
+    setFormattedPrice(formatNumberWithDots(num));
+    handleChange("price", num);
   }
 
   function handleFileSelect(e: React.ChangeEvent<HTMLInputElement>) {
@@ -148,15 +214,21 @@ export default function RoomForm({ initialData }: RoomFormProps) {
           <label className="block text-sm font-semibold text-slate-700 mb-1">
             Monthly Rent (VND)
           </label>
-          <input
-            required
-            type="number"
-            min={0}
-            value={form.price}
-            onChange={(e) => handleChange("price", Number(e.target.value))}
-            placeholder="e.g. 5000000"
-            className="w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-slate-900 focus:outline-none focus:ring-2 focus:ring-sky-500 text-sm"
-          />
+          <div className="relative">
+            <input
+              required
+              type="text"
+              value={formattedPrice}
+              onChange={handlePriceInput}
+              placeholder="e.g. 15.000.000"
+              className="w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-slate-900 focus:outline-none focus:ring-2 focus:ring-sky-500 text-sm font-semibold text-rose-600"
+            />
+            {form.price > 0 && (
+              <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs font-semibold text-slate-400 pointer-events-none">
+                VND
+              </span>
+            )}
+          </div>
         </div>
         <div>
           <label className="block text-sm font-semibold text-slate-700 mb-1">
@@ -191,29 +263,36 @@ export default function RoomForm({ initialData }: RoomFormProps) {
       <div className="grid grid-cols-2 gap-4">
         <div>
           <label className="block text-sm font-semibold text-slate-700 mb-1">
-            District / Area
+            District
           </label>
-          <input
-            required
-            type="text"
+          <select
             value={form.district}
             onChange={(e) => handleChange("district", e.target.value)}
-            placeholder="e.g., Hai Chau, Son Tra"
-            className="w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-slate-900 focus:outline-none focus:ring-2 focus:ring-sky-500 text-sm"
-          />
+            className="w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-slate-900 focus:outline-none focus:ring-2 focus:ring-sky-500 text-sm font-medium"
+          >
+            {DANANG_DISTRICTS.map((d) => (
+              <option key={d} value={d}>
+                {d}
+              </option>
+            ))}
+          </select>
         </div>
+
         <div>
           <label className="block text-sm font-semibold text-slate-700 mb-1">
             Property Type
           </label>
-          <input
-            required
-            type="text"
+          <select
             value={form.room_type}
             onChange={(e) => handleChange("room_type", e.target.value)}
-            placeholder="e.g., Studio, Mini Apartment"
-            className="w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-slate-900 focus:outline-none focus:ring-2 focus:ring-sky-500 text-sm"
-          />
+            className="w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-slate-900 focus:outline-none focus:ring-2 focus:ring-sky-500 text-sm font-medium"
+          >
+            {PROPERTY_TYPES.map((t) => (
+              <option key={t} value={t}>
+                {t}
+              </option>
+            ))}
+          </select>
         </div>
       </div>
 
@@ -224,7 +303,7 @@ export default function RoomForm({ initialData }: RoomFormProps) {
         <select
           value={form.status}
           onChange={(e) => handleChange("status", e.target.value as RoomStatus)}
-          className="w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-slate-900 focus:outline-none focus:ring-2 focus:ring-sky-500 text-sm"
+          className="w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-slate-900 focus:outline-none focus:ring-2 focus:ring-sky-500 text-sm font-medium"
         >
           <option value="trong">Available</option>
           <option value="da_coc">Reserved</option>

@@ -11,6 +11,8 @@ const initialFilters: FilterState = {
   search: "",
   district: "all",
   priceRange: "all",
+  minPrice: "",
+  maxPrice: "",
   roomType: "all",
   status: "all",
 };
@@ -44,29 +46,48 @@ export default function HomePage() {
 
       // 2. District filter
       if (filters.district !== "all") {
-        if (
-          room.district?.trim().toLowerCase() !==
-          filters.district.trim().toLowerCase()
-        ) {
+        const roomDist = room.district?.trim().toLowerCase() || "";
+        const filterDist = filters.district.trim().toLowerCase();
+        if (!roomDist.includes(filterDist) && !filterDist.includes(roomDist)) {
           return false;
         }
       }
 
-      // 3. Price range filter
+      // 3. Price filtering (Custom Min/Max + Preset Ranges)
+      const p = Number(room.price);
+
+      // Custom Min Price
+      if (filters.minPrice !== "") {
+        const min = Number(filters.minPrice);
+        if (!isNaN(min) && p < min) return false;
+      }
+
+      // Custom Max Price
+      if (filters.maxPrice !== "") {
+        const max = Number(filters.maxPrice);
+        if (!isNaN(max) && p > max) return false;
+      }
+
+      // Preset Price Ranges
       if (filters.priceRange !== "all") {
-        const p = Number(room.price);
-        if (filters.priceRange === "under_3m" && p >= 3000000) return false;
+        if (filters.priceRange === "7m_10m" && (p < 7000000 || p > 10000000))
+          return false;
         if (
-          filters.priceRange === "3m_5m" &&
-          (p < 3000000 || p > 5000000)
+          filters.priceRange === "10m_13m" &&
+          (p < 10000000 || p > 13000000)
         )
           return false;
         if (
-          filters.priceRange === "5m_8m" &&
-          (p < 5000000 || p > 8000000)
+          filters.priceRange === "13m_15m" &&
+          (p < 13000000 || p > 15000000)
         )
           return false;
-        if (filters.priceRange === "over_8m" && p <= 8000000) return false;
+        if (
+          filters.priceRange === "15m_20m" &&
+          (p < 15000000 || p > 20000000)
+        )
+          return false;
+        if (filters.priceRange === "over_20m" && p <= 20000000) return false;
       }
 
       // 4. Property type filter
@@ -201,7 +222,7 @@ export default function HomePage() {
           {/* Quick tags */}
           <div className="flex flex-wrap items-center justify-center gap-2 text-xs text-slate-400 pt-2">
             <span className="text-slate-500 font-medium">Quick search:</span>
-            {["Son Tra", "Hai Chau", "Studio", "Mezzanine"].map((tag) => (
+            {["Son Tra", "Hai Chau", "Studio", "Pham Kiet"].map((tag) => (
               <button
                 key={tag}
                 onClick={() =>
@@ -324,7 +345,7 @@ export default function HomePage() {
                     <div>
                       {/* Sub-header: District & Property Type */}
                       <div className="flex items-center gap-2 text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">
-                        <span>{room.district} District</span>
+                        <span>{room.district}</span>
                         {room.room_type && (
                           <>
                             <span>•</span>
@@ -370,7 +391,7 @@ export default function HomePage() {
                           Monthly Rent
                         </span>
                         <span className="text-base sm:text-lg font-extrabold text-rose-600">
-                          {room.price.toLocaleString("en-US")} VND
+                          {room.price.toLocaleString("vi-VN")} VND
                           <span className="text-xs font-normal text-slate-500">
                             /mo
                           </span>
@@ -429,7 +450,7 @@ export default function HomePage() {
               Service Areas
             </h4>
             <p className="text-xs text-slate-400 leading-relaxed">
-              Hai Chau • Son Tra • Ngu Hanh Son • Thanh Khe • Lien Chieu • Cam Le
+              Son Tra • Hai Chau • Ngu Hanh Son • Thanh Khe • Lien Chieu • Cam Le
             </p>
           </div>
         </div>

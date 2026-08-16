@@ -7,6 +7,8 @@ export interface FilterState {
   search: string;
   district: string;
   priceRange: string;
+  minPrice: string;
+  maxPrice: string;
   roomType: string;
   status: string;
 }
@@ -19,11 +21,29 @@ interface RoomFilterProps {
 }
 
 export const PRICE_RANGES = [
-  { label: "All Price Ranges", value: "all" },
-  { label: "Under 3M VND (~$120)", value: "under_3m" },
-  { label: "3M - 5M VND ($120 - $200)", value: "3m_5m" },
-  { label: "5M - 8M VND ($200 - $320)", value: "5m_8m" },
-  { label: "Above 8M VND (>$320)", value: "over_8m" },
+  { label: "All ranges", value: "all" },
+  { label: "7M - 10M VND (7tr - 10tr)", value: "7m_10m" },
+  { label: "10M - 13M VND (10tr - 13tr)", value: "10m_13m" },
+  { label: "13M - 15M VND (13tr - 15tr)", value: "13m_15m" },
+  { label: "15M - 20M VND (15tr - 20tr)", value: "15m_20m" },
+  { label: "Above 20M VND (> 20tr)", value: "over_20m" },
+];
+
+export const PRESET_PROPERTY_TYPES = [
+  "Studio",
+  "1-Bedroom Apartment",
+  "2-Bedroom Apartment",
+  "Penthouse",
+];
+
+export const PRESET_DISTRICTS = [
+  "Son Tra",
+  "Hai Chau",
+  "Ngu Hanh Son",
+  "Thanh Khe",
+  "Lien Chieu",
+  "Cam Le",
+  "Hoa Vang",
 ];
 
 export default function RoomFilter({
@@ -32,20 +52,22 @@ export default function RoomFilter({
   onFilterChange,
   onReset,
 }: RoomFilterProps) {
+  // Extract all available districts from actual room data + preset districts
   const availableDistricts = useMemo(() => {
-    const districts = new Set<string>();
+    const set = new Set<string>(PRESET_DISTRICTS);
     rooms.forEach((r) => {
-      if (r.district) districts.add(r.district.trim());
+      if (r.district) set.add(r.district.trim());
     });
-    return Array.from(districts).sort();
+    return Array.from(set).sort();
   }, [rooms]);
 
+  // Extract all available room types + preset types
   const availableRoomTypes = useMemo(() => {
-    const types = new Set<string>();
+    const set = new Set<string>(PRESET_PROPERTY_TYPES);
     rooms.forEach((r) => {
-      if (r.room_type) types.add(r.room_type.trim());
+      if (r.room_type) set.add(r.room_type.trim());
     });
-    return Array.from(types).sort();
+    return Array.from(set).sort();
   }, [rooms]);
 
   function handleChange(field: keyof FilterState, value: string) {
@@ -59,6 +81,8 @@ export default function RoomFilter({
     filters.search !== "" ||
     filters.district !== "all" ||
     filters.priceRange !== "all" ||
+    filters.minPrice !== "" ||
+    filters.maxPrice !== "" ||
     filters.roomType !== "all" ||
     filters.status !== "all";
 
@@ -94,12 +118,12 @@ export default function RoomFilter({
         )}
       </div>
 
-      {/* Grid of Dropdown Selectors */}
+      {/* Grid of Selectors */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5">
-        {/* Price Range */}
+        {/* Preset Price Ranges */}
         <div>
           <label className="block text-xs font-semibold text-slate-600 mb-1">
-            Monthly Rent
+            Monthly Rent Range
           </label>
           <select
             value={filters.priceRange}
@@ -114,10 +138,10 @@ export default function RoomFilter({
           </select>
         </div>
 
-        {/* District / Area */}
+        {/* District */}
         <div>
           <label className="block text-xs font-semibold text-slate-600 mb-1">
-            District / Area
+            District
           </label>
           <select
             value={filters.district}
@@ -127,9 +151,7 @@ export default function RoomFilter({
             <option value="all">All Locations</option>
             {availableDistricts.map((d) => (
               <option key={d} value={d}>
-                {d.toLowerCase().includes("quận") || d.toLowerCase().includes("district")
-                  ? d
-                  : `${d} District`}
+                {d}
               </option>
             ))}
           </select>
@@ -169,6 +191,49 @@ export default function RoomFilter({
             <option value="da_coc">🟡 Reserved</option>
             <option value="da_thue">⚪ Rented</option>
           </select>
+        </div>
+      </div>
+
+      {/* Custom Min / Max Price Inputs */}
+      <div className="pt-2 border-t border-slate-100 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+        <span className="text-xs font-semibold text-slate-500">
+          Custom Price Range (VND):
+        </span>
+        <div className="flex items-center gap-2 w-full sm:w-auto">
+          <div className="relative flex-1 sm:w-36">
+            <input
+              type="number"
+              min={0}
+              step={500000}
+              value={filters.minPrice}
+              onChange={(e) => handleChange("minPrice", e.target.value)}
+              placeholder="Min VND (e.g. 8000000)"
+              className="w-full py-1.5 px-3 bg-slate-50 border border-slate-200 rounded-lg text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:bg-white transition"
+            />
+          </div>
+          <span className="text-xs text-slate-400 font-bold">-</span>
+          <div className="relative flex-1 sm:w-36">
+            <input
+              type="number"
+              min={0}
+              step={500000}
+              value={filters.maxPrice}
+              onChange={(e) => handleChange("maxPrice", e.target.value)}
+              placeholder="Max VND (e.g. 15000000)"
+              className="w-full py-1.5 px-3 bg-slate-50 border border-slate-200 rounded-lg text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:bg-white transition"
+            />
+          </div>
+          {(filters.minPrice !== "" || filters.maxPrice !== "") && (
+            <button
+              onClick={() => {
+                handleChange("minPrice", "");
+                handleChange("maxPrice", "");
+              }}
+              className="text-xs text-slate-400 hover:text-slate-600 font-bold px-1.5"
+            >
+              Clear
+            </button>
+          )}
         </div>
       </div>
     </div>

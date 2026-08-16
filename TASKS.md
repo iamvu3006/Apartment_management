@@ -38,3 +38,10 @@
 - [x] **Task 7: Tạo tài liệu hướng dẫn sử dụng & Quản lý nhiều tài khoản Admin**
   - [x] Viết file `USER_GUIDE.md` hướng dẫn chi tiết cách dùng web, thêm/sửa/xoá phòng và gửi link cho khách
   - [x] Hướng dẫn cách tạo 2 hoặc nhiều tài khoản Admin quản lý phòng trong Supabase Dashboard
+
+- [x] **Task 8: Nâng cấp Form Thêm/Sửa Phòng & Bộ Lọc Giá Nâng Cao**
+  - [x] **Monthly Rent Input**: Tự động phân cách hàng đơn vị bằng dấu chấm `.` khi gõ (vd: `15.000.000`). Đồng bộ ngăn cách bằng dấu `.` trên Dashboard & Cards.
+  - [x] **District Input**: Đổi nhãn thành `District`, sử dụng Dropdown select chứa danh sách Quận/Phường tại Đà Nẵng.
+  - [x] **Property Type Input**: Sử dụng Dropdown select cố định 4 option: `Studio`, `1-Bedroom Apartment`, `2-Bedroom Apartment`, `Penthouse`.
+  - [x] **Bộ Lọc Giá Thuê Mới**: Cập nhật khoảng giá 7tr-10tr, 10tr-13tr, 13tr-15tr, 15tr-20tr, >20tr.
+  - [x] **Custom Min/Max Price**: Bổ sung tính năng cho khách hàng tự nhập khoảng giá Tối thiểu (Min) và Tối đa (Max).
