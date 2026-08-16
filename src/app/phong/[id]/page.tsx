@@ -111,7 +111,7 @@ export default function RoomDetailPage({
       {/* Main Content */}
       <main className="max-w-6xl mx-auto px-4 sm:px-6 pt-6 flex-1 w-full">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Left & Middle Column: Image Gallery + Details */}
+          {/* Left Column: Image Gallery + Details */}
           <div className="lg:col-span-2 space-y-6">
             {/* Image Gallery */}
             <div className="bg-white rounded-2xl border border-slate-200/80 overflow-hidden shadow-sm">
@@ -255,7 +255,7 @@ export default function RoomDetailPage({
                     Monthly Rent
                   </span>
                   <span className="text-lg sm:text-xl font-extrabold text-rose-600">
-                    {room.price.toLocaleString("en-US")} VND
+                    {room.price.toLocaleString("vi-VN")} VND
                     <span className="text-xs font-normal text-slate-500">
                       /mo
                     </span>
@@ -293,134 +293,175 @@ export default function RoomDetailPage({
             </div>
           </div>
 
-          {/* Right Column: Desktop Contact Sidebar */}
+          {/* Right Column: Desktop Contact Sidebar (Both Specialists) */}
           <div className="hidden lg:block space-y-6">
-            <div className="bg-white rounded-2xl border border-slate-200/80 p-6 shadow-sm sticky top-20 space-y-5">
-              <div className="border-b border-slate-100 pb-4">
-                <span className="text-[10px] text-sky-600 font-bold uppercase tracking-wider block">
-                  Support & Viewing 24/7
+            <div className="bg-white rounded-2xl border border-slate-200/80 p-6 shadow-sm sticky top-20 space-y-6">
+              <div>
+                <span className="text-[10px] text-sky-600 font-extrabold uppercase tracking-wider block">
+                  Support & Direct Viewing 24/7
                 </span>
-                <h3 className="text-base font-bold text-slate-900 mt-1">
-                  {CONTACT_CONFIG.ownerName}
+                <h3 className="text-base font-extrabold text-slate-900 mt-1">
+                  Contact Our Rental Specialists
                 </h3>
-                <p className="text-xs text-slate-500 mt-0.5">
-                  English-speaking local rental consultant in Da Nang
-                </p>
               </div>
 
-              <div className="space-y-3">
-                <a
-                  href={`tel:${CONTACT_CONFIG.phone}`}
-                  className="flex items-center justify-center gap-2.5 w-full bg-rose-600 hover:bg-rose-700 text-white font-bold py-3.5 px-4 rounded-xl shadow-sm transition text-sm"
-                >
-                  <svg
-                    className="w-4 h-4"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2.5}
-                      d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"
-                    />
-                  </svg>
-                  <span>Call {CONTACT_CONFIG.displayPhone}</span>
-                </a>
+              {/* Contact Person 1: Vu */}
+              <div className="p-4 bg-slate-50 rounded-2xl border border-slate-200/80 space-y-3">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <span className="font-bold text-slate-900 text-sm block">
+                      {CONTACT_CONFIG.primary.name}
+                    </span>
+                    <span className="text-xs font-semibold text-sky-600">
+                      {CONTACT_CONFIG.primary.displayPhone}
+                    </span>
+                  </div>
+                </div>
 
-                <a
-                  href={`https://zalo.me/${CONTACT_CONFIG.zalo}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center justify-center gap-2.5 w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3.5 px-4 rounded-xl shadow-sm transition text-sm"
-                >
-                  <span>Message on Zalo</span>
-                </a>
-
-                <a
-                  href={`https://wa.me/${CONTACT_CONFIG.whatsapp}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center justify-center gap-2.5 w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3.5 px-4 rounded-xl shadow-sm transition text-sm"
-                >
-                  <span>WhatsApp Chat</span>
-                </a>
-
-                {CONTACT_CONFIG.facebook && (
+                <div className="grid grid-cols-2 gap-2 pt-1">
                   <a
-                    href={CONTACT_CONFIG.facebook}
+                    href={`tel:${CONTACT_CONFIG.primary.phone}`}
+                    className="flex items-center justify-center gap-1.5 bg-rose-600 hover:bg-rose-700 text-white font-bold py-2 px-3 rounded-xl text-xs shadow-sm transition"
+                  >
+                    <span>Call Vu</span>
+                  </a>
+                  <a
+                    href={`https://zalo.me/${CONTACT_CONFIG.primary.zalo}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center justify-center gap-2.5 w-full bg-slate-800 hover:bg-slate-900 text-white font-bold py-3.5 px-4 rounded-xl shadow-sm transition text-sm"
+                    className="flex items-center justify-center gap-1.5 bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-3 rounded-xl text-xs shadow-sm transition"
                   >
-                    <span>Facebook Messenger</span>
+                    <span>Zalo</span>
                   </a>
-                )}
+                  <a
+                    href={`https://wa.me/${CONTACT_CONFIG.primary.whatsapp}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center justify-center gap-1.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2 px-3 rounded-xl text-xs shadow-sm transition"
+                  >
+                    <span>WhatsApp</span>
+                  </a>
+                  <a
+                    href={CONTACT_CONFIG.primary.facebook}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center justify-center gap-1.5 bg-slate-800 hover:bg-slate-900 text-white font-bold py-2 px-3 rounded-xl text-xs shadow-sm transition"
+                  >
+                    <span>Messenger</span>
+                  </a>
+                </div>
+              </div>
+
+              {/* Contact Person 2: Han My */}
+              <div className="p-4 bg-slate-50 rounded-2xl border border-slate-200/80 space-y-3">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <span className="font-bold text-slate-900 text-sm block">
+                      {CONTACT_CONFIG.secondary.name}
+                    </span>
+                    <span className="text-xs font-semibold text-sky-600">
+                      {CONTACT_CONFIG.secondary.displayPhone}
+                    </span>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-2 pt-1">
+                  <a
+                    href={`tel:${CONTACT_CONFIG.secondary.phone}`}
+                    className="flex items-center justify-center gap-1.5 bg-rose-600 hover:bg-rose-700 text-white font-bold py-2 px-3 rounded-xl text-xs shadow-sm transition"
+                  >
+                    <span>Call Han My</span>
+                  </a>
+                  <a
+                    href={`https://zalo.me/${CONTACT_CONFIG.secondary.zalo}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center justify-center gap-1.5 bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-3 rounded-xl text-xs shadow-sm transition"
+                  >
+                    <span>Zalo</span>
+                  </a>
+                  <a
+                    href={`https://wa.me/${CONTACT_CONFIG.secondary.whatsapp}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center justify-center gap-1.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2 px-3 rounded-xl text-xs shadow-sm transition"
+                  >
+                    <span>WhatsApp</span>
+                  </a>
+                  <a
+                    href={CONTACT_CONFIG.secondary.facebook}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center justify-center gap-1.5 bg-slate-800 hover:bg-slate-900 text-white font-bold py-2 px-3 rounded-xl text-xs shadow-sm transition"
+                  >
+                    <span>Messenger</span>
+                  </a>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </main>
 
-      {/* Fixed Bottom Mobile Action Bar */}
-      <div className="lg:hidden fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-slate-200 p-3 z-30 shadow-2xl">
-        <div className="max-w-md mx-auto grid grid-cols-4 gap-2">
-          <a
-            href={`tel:${CONTACT_CONFIG.phone}`}
-            className="flex flex-col items-center justify-center py-2.5 px-1 bg-rose-600 text-white rounded-xl text-[11px] font-bold active:scale-95 transition shadow-sm"
-          >
-            <svg
-              className="w-4 h-4 mb-0.5"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2.5}
-                d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"
-              />
-            </svg>
-            <span>Call Now</span>
-          </a>
-
-          <a
-            href={`https://zalo.me/${CONTACT_CONFIG.zalo}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex flex-col items-center justify-center py-2.5 px-1 bg-blue-600 text-white rounded-xl text-[11px] font-bold active:scale-95 transition shadow-sm"
-          >
-            <span className="font-extrabold text-xs leading-none mb-0.5">ZALO</span>
-            <span>Zalo</span>
-          </a>
-
-          <a
-            href={`https://wa.me/${CONTACT_CONFIG.whatsapp}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex flex-col items-center justify-center py-2.5 px-1 bg-emerald-600 text-white rounded-xl text-[11px] font-bold active:scale-95 transition shadow-sm"
-          >
-            <span className="font-extrabold text-xs leading-none mb-0.5">WA</span>
-            <span>WhatsApp</span>
-          </a>
-
-          {CONTACT_CONFIG.facebook ? (
+      {/* Fixed Bottom Mobile Action Bar (Both Contacts) */}
+      <div className="lg:hidden fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-slate-200 p-2.5 z-30 shadow-2xl space-y-1.5">
+        <div className="text-[10px] font-extrabold text-slate-500 text-center uppercase tracking-wider">
+          Contact Specialists 24/7
+        </div>
+        <div className="grid grid-cols-2 gap-2">
+          {/* Vu button group */}
+          <div className="flex items-center gap-1 bg-slate-100 p-1 rounded-xl">
+            <span className="text-[10px] font-bold text-slate-700 px-1 truncate">Vu:</span>
             <a
-              href={CONTACT_CONFIG.facebook}
+              href={`tel:${CONTACT_CONFIG.primary.phone}`}
+              className="flex-1 py-1.5 bg-rose-600 text-white rounded-lg text-[10px] font-bold text-center"
+            >
+              Call
+            </a>
+            <a
+              href={`https://zalo.me/${CONTACT_CONFIG.primary.zalo}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex flex-col items-center justify-center py-2.5 px-1 bg-slate-900 text-white rounded-xl text-[11px] font-bold active:scale-95 transition shadow-sm"
+              className="flex-1 py-1.5 bg-blue-600 text-white rounded-lg text-[10px] font-bold text-center"
             >
-              <span className="font-extrabold text-xs leading-none mb-0.5">FB</span>
-              <span>Facebook</span>
+              Zalo
             </a>
-          ) : (
-            <div className="flex flex-col items-center justify-center py-2.5 px-1 bg-slate-100 text-slate-400 rounded-xl text-[11px] font-medium">
-              <span>Da Nang</span>
-            </div>
-          )}
+            <a
+              href={`https://wa.me/${CONTACT_CONFIG.primary.whatsapp}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex-1 py-1.5 bg-emerald-600 text-white rounded-lg text-[10px] font-bold text-center"
+            >
+              WA
+            </a>
+          </div>
+
+          {/* Han My button group */}
+          <div className="flex items-center gap-1 bg-slate-100 p-1 rounded-xl">
+            <span className="text-[10px] font-bold text-slate-700 px-1 truncate">My:</span>
+            <a
+              href={`tel:${CONTACT_CONFIG.secondary.phone}`}
+              className="flex-1 py-1.5 bg-rose-600 text-white rounded-lg text-[10px] font-bold text-center"
+            >
+              Call
+            </a>
+            <a
+              href={`https://zalo.me/${CONTACT_CONFIG.secondary.zalo}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex-1 py-1.5 bg-blue-600 text-white rounded-lg text-[10px] font-bold text-center"
+            >
+              Zalo
+            </a>
+            <a
+              href={`https://wa.me/${CONTACT_CONFIG.secondary.whatsapp}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex-1 py-1.5 bg-emerald-600 text-white rounded-lg text-[10px] font-bold text-center"
+            >
+              WA
+            </a>
+          </div>
         </div>
       </div>
     </div>

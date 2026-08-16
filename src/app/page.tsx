@@ -129,25 +129,47 @@ export default function HomePage() {
           </Link>
 
           <div className="flex items-center gap-3 sm:gap-5">
-            <a
-              href={`tel:${CONTACT_CONFIG.phone}`}
-              className="hidden sm:flex items-center gap-1.5 text-xs text-slate-300 hover:text-white font-medium transition"
-            >
-              <svg
-                className="w-3.5 h-3.5 text-sky-400"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
+            <div className="hidden md:flex items-center gap-4 text-xs">
+              <a
+                href={`tel:${CONTACT_CONFIG.primary.phone}`}
+                className="flex items-center gap-1.5 text-slate-300 hover:text-white font-medium transition"
               >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"
-                />
-              </svg>
-              <span>{CONTACT_CONFIG.displayPhone}</span>
-            </a>
+                <svg
+                  className="w-3.5 h-3.5 text-sky-400"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"
+                  />
+                </svg>
+                <span>Vu: {CONTACT_CONFIG.primary.displayPhone}</span>
+              </a>
+
+              <a
+                href={`tel:${CONTACT_CONFIG.secondary.phone}`}
+                className="flex items-center gap-1.5 text-slate-300 hover:text-white font-medium transition"
+              >
+                <svg
+                  className="w-3.5 h-3.5 text-emerald-400"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"
+                  />
+                </svg>
+                <span>Han My: {CONTACT_CONFIG.secondary.displayPhone}</span>
+              </a>
+            </div>
 
             <Link
               href="/admin"
@@ -429,20 +451,30 @@ export default function HomePage() {
 
           <div>
             <h4 className="font-bold text-white mb-3 text-xs uppercase tracking-wider">
-              Direct Contact
+              Direct Contact Specialists
             </h4>
-            <p className="text-xs text-slate-300 font-semibold mb-1">
-              {CONTACT_CONFIG.ownerName}
-            </p>
-            <p className="text-xs text-slate-400">
-              Hotline/Zalo/WhatsApp:{" "}
-              <a
-                href={`tel:${CONTACT_CONFIG.phone}`}
-                className="text-sky-400 underline font-semibold"
-              >
-                {CONTACT_CONFIG.displayPhone}
-              </a>
-            </p>
+            <div className="space-y-2 text-xs">
+              <div>
+                <span className="text-slate-200 font-bold block">{CONTACT_CONFIG.primary.name}</span>
+                <span className="text-slate-400">Hotline/Zalo/WhatsApp: </span>
+                <a
+                  href={`tel:${CONTACT_CONFIG.primary.phone}`}
+                  className="text-sky-400 underline font-semibold"
+                >
+                  {CONTACT_CONFIG.primary.displayPhone}
+                </a>
+              </div>
+              <div>
+                <span className="text-slate-200 font-bold block">{CONTACT_CONFIG.secondary.name}</span>
+                <span className="text-slate-400">Hotline/Zalo/WhatsApp: </span>
+                <a
+                  href={`tel:${CONTACT_CONFIG.secondary.phone}`}
+                  className="text-emerald-400 underline font-semibold"
+                >
+                  {CONTACT_CONFIG.secondary.displayPhone}
+                </a>
+              </div>
+            </div>
           </div>
 
           <div>

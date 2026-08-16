@@ -46,13 +46,24 @@ export const PRESET_DISTRICTS = [
   "Hoa Vang",
 ];
 
+function formatNumberWithDots(val: number | string): string {
+  if (!val && val !== 0) return "";
+  const clean = String(val).replace(/\D/g, "");
+  if (!clean) return "";
+  return Number(clean).toLocaleString("vi-VN");
+}
+
+function parseDotsToNumber(val: string): string {
+  const clean = val.replace(/\D/g, "");
+  return clean;
+}
+
 export default function RoomFilter({
   rooms,
   filters,
   onFilterChange,
   onReset,
 }: RoomFilterProps) {
-  // Extract all available districts from actual room data + preset districts
   const availableDistricts = useMemo(() => {
     const set = new Set<string>(PRESET_DISTRICTS);
     rooms.forEach((r) => {
@@ -61,7 +72,6 @@ export default function RoomFilter({
     return Array.from(set).sort();
   }, [rooms]);
 
-  // Extract all available room types + preset types
   const availableRoomTypes = useMemo(() => {
     const set = new Set<string>(PRESET_PROPERTY_TYPES);
     rooms.forEach((r) => {
@@ -194,7 +204,7 @@ export default function RoomFilter({
         </div>
       </div>
 
-      {/* Custom Min / Max Price Inputs */}
+      {/* Custom Min / Max Price Inputs with Dot Formatting */}
       <div className="pt-2 border-t border-slate-100 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
         <span className="text-xs font-semibold text-slate-500">
           Custom Price Range (VND):
@@ -202,25 +212,25 @@ export default function RoomFilter({
         <div className="flex items-center gap-2 w-full sm:w-auto">
           <div className="relative flex-1 sm:w-36">
             <input
-              type="number"
-              min={0}
-              step={500000}
-              value={filters.minPrice}
-              onChange={(e) => handleChange("minPrice", e.target.value)}
-              placeholder="Min VND (e.g. 8000000)"
-              className="w-full py-1.5 px-3 bg-slate-50 border border-slate-200 rounded-lg text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:bg-white transition"
+              type="text"
+              value={formatNumberWithDots(filters.minPrice)}
+              onChange={(e) =>
+                handleChange("minPrice", parseDotsToNumber(e.target.value))
+              }
+              placeholder="Min (e.g. 5.000.000)"
+              className="w-full py-1.5 px-3 bg-slate-50 border border-slate-200 rounded-lg text-xs text-slate-800 font-medium focus:outline-none focus:ring-2 focus:ring-sky-500 focus:bg-white transition"
             />
           </div>
           <span className="text-xs text-slate-400 font-bold">-</span>
           <div className="relative flex-1 sm:w-36">
             <input
-              type="number"
-              min={0}
-              step={500000}
-              value={filters.maxPrice}
-              onChange={(e) => handleChange("maxPrice", e.target.value)}
-              placeholder="Max VND (e.g. 15000000)"
-              className="w-full py-1.5 px-3 bg-slate-50 border border-slate-200 rounded-lg text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:bg-white transition"
+              type="text"
+              value={formatNumberWithDots(filters.maxPrice)}
+              onChange={(e) =>
+                handleChange("maxPrice", parseDotsToNumber(e.target.value))
+              }
+              placeholder="Max (e.g. 15.000.000)"
+              className="w-full py-1.5 px-3 bg-slate-50 border border-slate-200 rounded-lg text-xs text-slate-800 font-medium focus:outline-none focus:ring-2 focus:ring-sky-500 focus:bg-white transition"
             />
           </div>
           {(filters.minPrice !== "" || filters.maxPrice !== "") && (
