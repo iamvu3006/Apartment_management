@@ -48,16 +48,16 @@ export default function RoomMapInner({ rooms }: RoomMapInnerProps) {
   useEffect(() => {
     if (!mapContainerRef.current) return;
 
-    // Initialize Leaflet map with CartoDB Voyager international tiles
+    // Initialize Leaflet map with standard OpenStreetMap tiles (showing full amenities & details)
     if (!mapInstanceRef.current) {
       const map = L.map(mapContainerRef.current, {
         center: [16.0544, 108.2300], // Da Nang Dragon Bridge center
-        zoom: 13,
+        zoom: 14,
         scrollWheelZoom: true,
       });
 
-      L.tileLayer("https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png", {
-        attribution: '&copy; <a href="https://carto.com/">CARTO</a> & OpenStreetMap',
+      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
         maxZoom: 19,
       }).addTo(map);
 
