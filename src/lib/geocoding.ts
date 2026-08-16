@@ -1,6 +1,6 @@
 // High-Precision Geocoding Service for Da Nang Properties
 
-const GEO_CACHE_PREFIX = "v2_danang_geo_cache_";
+const GEO_CACHE_PREFIX = "v3_danang_geo_cache_";
 
 // High-precision coordinates for popular streets & quarters in Da Nang
 const EXACT_STREET_COORDINATES: Record<string, [number, number]> = {
@@ -20,11 +20,15 @@ const EXACT_STREET_COORDINATES: Record<string, [number, number]> = {
   "my khe": [16.0580, 108.2410],
   "mỹ khê": [16.0580, 108.2410],
 
-  // Ngũ Hành Sơn District
-  "pham kiet": [16.0350, 108.2434], // Đường Phạm Kiệt (Khuê Mỹ / Mỹ An - gần bãi tắm T20)
-  "phạm kiệt": [16.0350, 108.2434],
+  // Ngũ Hành Sơn District (Expat Quarter & An Thượng Streets)
+  "an thuong 38": [16.0478, 108.2435], // Đường An Thượng 38
+  "an thượng 38": [16.0478, 108.2435],
+  "an thuong 26": [16.0490, 108.2425],
+  "an thượng 26": [16.0490, 108.2425],
   "an thuong": [16.0485, 108.2420],
   "an thượng": [16.0485, 108.2420],
+  "pham kiet": [16.0350, 108.2434], // Đường Phạm Kiệt
+  "phạm kiệt": [16.0350, 108.2434],
   "my an": [16.0480, 108.2425],
   "mỹ an": [16.0480, 108.2425],
   "khue my": [16.0350, 108.2440],
@@ -46,6 +50,14 @@ export function cleanStreetName(rawAddress: string): string {
   if (!rawAddress) return "";
 
   let clean = rawAddress;
+  // Strip English and Vietnamese prefixes/suffixes
+  clean = clean.replace(/\bstreet\b/gi, "");
+  clean = clean.replace(/\bst\b/gi, "");
+  clean = clean.replace(/\bđường\b/gi, "");
+  clean = clean.replace(/\bđ\.\b/gi, "");
+  clean = clean.replace(/\broad\b/gi, "");
+
+  // Remove floor, unit, bedroom info
   clean = clean.replace(/tầng\s*\d+/gi, "");
   clean = clean.replace(/floor\s*\d+/gi, "");
   clean = clean.replace(/\d+pn/gi, "");
@@ -94,10 +106,11 @@ export async function geocodeAddress(
     } catch {}
   }
 
-  // 3. Fallback to Nominatim Geocoding API for new unknown streets
+  // 3. Smart Geocoding API Queries (Supports English "An Thuong 38 Street", "Pham Kiet Street", etc.)
   const queries = [
     `Đường ${streetName}, ${district}, Đà Nẵng, Việt Nam`,
-    `${streetName}, ${district}, Da Nang, Vietnam`,
+    `Đường ${streetName}, Đà Nẵng, Việt Nam`,
+    `${streetName} Street, ${district}, Da Nang, Vietnam`,
     `${streetName}, Da Nang, Vietnam`,
     `${district}, Da Nang, Vietnam`,
   ];
