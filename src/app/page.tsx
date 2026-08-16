@@ -41,16 +41,17 @@ export default function HomePage() {
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
         {rooms.map((room) => (
-          <div
+          <Link
             key={room.id}
-            className="bg-white border border-stone-200 rounded-xl overflow-hidden"
+            href={`/phong/${room.id}`}
+            className="bg-white border border-stone-200 rounded-xl overflow-hidden hover:shadow-md transition block group"
           >
             {room.images[0] ? (
               // eslint-disable-next-line @next/next/no-img-element
               <img
                 src={room.images[0]}
                 alt={room.title}
-                className="w-full h-44 object-cover"
+                className="w-full h-44 object-cover group-hover:scale-105 transition duration-300"
               />
             ) : (
               <div className="w-full h-44 bg-stone-100 flex items-center justify-center text-stone-400 text-sm">
@@ -59,7 +60,9 @@ export default function HomePage() {
             )}
             <div className="p-4">
               <div className="flex items-center gap-2 mb-1">
-                <h2 className="font-medium truncate">{room.title}</h2>
+                <h2 className="font-medium truncate group-hover:text-orange-600 transition">
+                  {room.title}
+                </h2>
                 <span
                   className={`text-xs px-2 py-0.5 rounded-full whitespace-nowrap ${STATUS_COLORS[room.status]}`}
                 >
@@ -73,7 +76,7 @@ export default function HomePage() {
                 {room.price.toLocaleString("vi-VN")}đ/tháng
               </p>
             </div>
-          </div>
+          </Link>
         ))}
       </div>
     </div>

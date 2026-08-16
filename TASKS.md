@@ -8,10 +8,10 @@
   - [x] Thêm nút Đăng xuất (Logout) trong `/admin`
   - [x] Cập nhật RLS policies trong `supabase/schema.sql` (chỉ cho phép authenticated sửa/xoá/thêm)
 
-- [ ] **Task 2: Trang chi tiết phòng (`/phong/[id]`)**
-  - [ ] Tạo file cấu hình liên hệ `src/config/contact.ts`
-  - [ ] Tạo trang `/phong/[id]` với gallery/carousel ảnh, chi tiết phòng
-  - [ ] Nút liên hệ nhanh: Nút Gọi điện (`tel:`), Zalo, WhatsApp, Facebook
+- [x] **Task 2: Trang chi tiết phòng (`/phong/[id]`)**
+  - [x] Tạo file cấu hình liên hệ `src/config/contact.ts`
+  - [x] Tạo trang `/phong/[id]` với gallery/carousel ảnh, chi tiết phòng
+  - [x] Nút liên hệ nhanh: Nút Gọi điện (`tel:`), Zalo, WhatsApp, Facebook
 
 - [ ] **Task 3: Filter/search trên trang public**
   - [ ] Bộ lọc client-side theo khoảng giá, khu vực (quận), loại phòng, trạng thái
