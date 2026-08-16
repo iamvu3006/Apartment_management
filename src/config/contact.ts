@@ -9,7 +9,7 @@ export interface ContactPerson {
 
 export const CONTACT_CONFIG = {
   primary: {
-    name: "Vu - Da Nang Rental Specialist",
+    name: "Ba Vu - Da Nang Rental Specialist",
     phone: "0396730410",
     displayPhone: "+84 396 730 410",
     zalo: "0396730410",
@@ -25,7 +25,7 @@ export const CONTACT_CONFIG = {
     facebook: "https://www.facebook.com/han.my.724857",
   },
   // Backward compatibility default properties
-  ownerName: "Vu - Da Nang Rental Specialist",
+  ownerName: "Ba Vu - Da Nang Rental Specialist",
   phone: "0396730410",
   displayPhone: "+84 396 730 410",
   zalo: "0396730410",

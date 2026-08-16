@@ -199,7 +199,7 @@ export default function RoomFilter({
             <option value="all">All Statuses</option>
             <option value="trong">🟢 Available</option>
             <option value="da_coc">🟡 Reserved</option>
-            <option value="da_thue">⚪ Rented</option>
+            <option value="da_thue">🔴 Rented</option>
           </select>
         </div>
       </div>

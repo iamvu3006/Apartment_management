@@ -1,7 +1,7 @@
 # 📘 HƯỚNG DẪN SỬ DỤNG HỆ THỐNG QUẢN LÝ PHÒNG CHO THUÊ
 ## (Da Nang Homes - Property Listing Web App)
 
-Chào Vũ! Đây là tài liệu hướng dẫn chi tiết toàn bộ cách vận hành, quản lý phòng và cấp quyền cho nhiều tài khoản Admin của hệ thống web app cho thuê phòng căn hộ Đà Nẵng.
+Chào Vũ & Team! Đây là tài liệu hướng dẫn chi tiết toàn bộ cách vận hành, quản lý phòng và cấp quyền cho nhiều tài khoản Admin của hệ thống web app cho thuê phòng căn hộ Đà Nẵng.
 
 ---
 
@@ -10,6 +10,18 @@ Chào Vũ! Đây là tài liệu hướng dẫn chi tiết toàn bộ cách vậ
 - **Link Khách Hàng Xem Phòng (Public)**: [https://apartment-management-topaz.vercel.app](https://apartment-management-topaz.vercel.app)
 - **Link Trang Quản Trị Admin**: [https://apartment-management-topaz.vercel.app/admin](https://apartment-management-topaz.vercel.app/admin)
 - **Link Đăng Nhập Admin**: [https://apartment-management-topaz.vercel.app/admin/login](https://apartment-management-topaz.vercel.app/admin/login)
+
+---
+
+## 📞 DANH SÁCH NHÂN SỰ LIÊN HỆ TRÊN WEB APP
+
+1. **Vu (Primary Rental Specialist)**:
+   - Phone / Zalo / WhatsApp: `+84 396 730 410` (`0396730410`)
+   - Facebook Messenger: `https://www.facebook.com/ba.vu.420904`
+
+2. **Han My (Rental Specialist)**:
+   - Phone / Zalo / WhatsApp: `+84 945 976 247` (`0945976247`)
+   - Facebook Messenger: `https://www.facebook.com/han.my.724857`
 
 ---
 
@@ -39,17 +51,17 @@ Hệ thống được thiết kế với cơ chế bảo mật **Supabase Auth**
 2. Nhấn nút **`+ Add New Property`** ở góc phải trên.
 3. Nhập đầy đủ thông tin căn hộ:
    - **Listing Title (Tiêu đề)**: Nhập tên phòng bằng tiếng Anh (ví dụ: *Modern 1-Bedroom Apartment on Pham Kiet Street*).
-   - **Monthly Rent (VND)**: Nhập giá thuê dạng số (ví dụ: `16000000` cho 16 triệu).
+   - **Monthly Rent (VND)**: Nhập giá thuê (gõ `15000000` hệ thống tự phân cách thành `15.000.000`).
    - **Area (m²)**: Nhập diện tích (ví dụ: `55`).
    - **Street Address (Địa chỉ)**: Tên đường, số nhà (ví dụ: *Pham Kiet Street*).
-   - **District / Area (Quận)**: Nhập tên quận (ví dụ: *Ngu Hanh Son* hoặc *Son Tra*).
-   - **Property Type (Loại hình)**: Ví dụ: *1-Bedroom Apartment*, *Studio*, *2-Bedroom Apartment*.
+   - **District (Quận/Phường)**: Chọn từ menu Dropdown (Sơn Trà, Phước Mỹ, An Hải Bắc, Hải Châu, Mỹ An...).
+   - **Property Type (Loại hình)**: Chọn từ Dropdown (`Studio`, `1-Bedroom Apartment`, `2-Bedroom Apartment`, `Penthouse`).
    - **Availability Status (Trạng thái)**:
      - `Available`: Phòng còn trống, sẵn sàng cho thuê (hiển thị badge xanh 🟢).
      - `Reserved`: Khách đã cọc (hiển thị badge vàng 🟡).
      - `Rented`: Đã cho thuê (hiển thị badge xám ⚪).
    - **Description (Mô tả chi tiết)**: Nhập chi tiết tiện ích, ngày trống, phí điện, nước, phí dịch vụ (Wi-Fi, dọn phòng,...).
-   - **Property Photos (Ảnh phòng)**: Nhấn nút chọn file để tải lên nhiều ảnh chụp thực tế của căn hộ.
+   - **Property Photos (Ảnh phòng)**: Nhấn nút **`Choose Property Photos`** để tải lên nhiều ảnh chụp thực tế của căn hộ.
 4. Bấm **Save Changes** (hoặc **Add Property**).
 5. **Hoàn tất!** Phòng mới cùng ảnh sẽ tự động hiển thị lập tức trên trang chủ gửi cho khách hàng.
 
@@ -73,18 +85,9 @@ Hệ thống được thiết kế với cơ chế bảo mật **Supabase Auth**
 
 ### 🌐 Trường hợp 1: Gửi toàn bộ danh sách phòng
 - Copy link: `https://apartment-management-topaz.vercel.app`
-- Gửi cho khách qua Zalo/WhatsApp/Messenger. Khách có thể dùng bộ lọc theo giá, theo quận để chọn phòng thích hợp.
+- Gửi cho khách qua Zalo/WhatsApp/Messenger. Khách có thể dùng bộ lọc theo giá (có tính năng tự gõ Min/Max Price tự động chèn dấu chấm `.`), lọc quận hoặc loại phòng.
 
 ### 🏠 Trường hợp 2: Gửi bài xem chi tiết 1 phòng cụ thể
 - Bấm vào phòng đó trên web để mở trang chi tiết (ví dụ: `https://apartment-management-topaz.vercel.app/phong/1077d6f5-5cd8-4f3d-8b9b-10821a791152`).
 - Copy link trên thanh địa chỉ trình duyệt và gửi cho khách.
-- Khách hàng xem bài đăng sẽ thấy ảnh gallery lớn, giá thuê minh bạch và nút bấm **"Call Now"**, **"Zalo"**, **"WhatsApp"** để liên hệ trực tiếp với bạn.
-
----
-
-## 🔒 5. LƯU Ý VỀ BẢO MẬT & VẬN HÀNH
-
-1. **Dữ liệu đám mây (Cloud Database)**: Mọi thao tác thêm/sửa/xoá phòng do bất kỳ Admin nào thực hiện đều được đồng bộ tức thì trên cơ sở dữ liệu Supabase và hiển thị ngay trên trang Vercel mà không cần deploy lại code.
-2. **Không chia sẻ mật khẩu Supabase Dashboard**: Chỉ chia sẻ tài khoản đăng nhập web (`/admin/login`) cho nhân viên sale. Giữ mật khẩu tài khoản gốc Supabase của riêng bạn.
-
-Chúc bạn và team chốt được nhiều hợp đồng cho thuê phòng thành công! 🚀
+- Khách hàng xem bài đăng sẽ thấy ảnh gallery lớn, giá thuê minh bạch và các khung liên hệ trực tiếp cho cả 2 nhân sự **Vu** & **Han My** qua Call, Zalo, WhatsApp, Facebook Messenger.
