@@ -13,9 +13,9 @@
   - [x] Tạo trang `/phong/[id]` với gallery/carousel ảnh, chi tiết phòng
   - [x] Nút liên hệ nhanh: Nút Gọi điện (`tel:`), Zalo, WhatsApp, Facebook
 
-- [ ] **Task 3: Filter/search trên trang public**
-  - [ ] Bộ lọc client-side theo khoảng giá, khu vực (quận), loại phòng, trạng thái
-  - [ ] Ô tìm kiếm từ khoá tiêu đề / địa chỉ
+- [x] **Task 3: Filter/search trên trang public**
+  - [x] Bộ lọc client-side theo khoảng giá, khu vực (quận), loại phòng, trạng thái
+  - [x] Ô tìm kiếm từ khoá tiêu đề / địa chỉ
 
 - [ ] **Task 4: Thiết kế lại giao diện cho chuyên nghiệp**
   - [ ] Chốt hướng thiết kế trước khi code: bảng màu (4-6 mã hex có tên), font heading/body — tránh 3 kiểu AI mặc định (be/serif/cam đất, đen/neon, báo/kẻ mảnh)
