@@ -55,3 +55,10 @@
   - [x] **Tích hợp Menu Chọn 5 Ngôn Ngữ**: 🇬🇧 English, 🇰🇷 한국어 (Korean), 🇨🇳 中文 (Chinese), 🇷🇺 Русский (Russian), 🇻🇳 Tiếng Việt.
   - [x] **Bản Đồ Quốc Tế CartoDB**: Chuyển bản đồ sang lớp CartoDB Voyager hiển thị tên đường và địa danh chuẩn ký tự quốc tế/Latinh sắc nét cho khách nước ngoài.
   - [x] **Dịch Popup & Giao Diện**: Popup bản đồ và toàn bộ các nút hành động tự động dịch theo ngôn ngữ được chọn.
+
+- [x] **Task 11: Phân Trang Căn Hộ & Nâng Cấp Formatter Mô Tả (Pagination & Auto-Expand Rich Description)**
+  - [x] **Phân Trang 6 Căn Hộ/Trang**: Tích hợp thanh phân trang cho danh sách căn hộ tại trang chủ (6 căn/trang), tự động reset về trang 1 khi dùng bộ lọc/tìm kiếm, tự động cuộn lên đầu danh sách khi chuyển trang.
+  - [x] **Description Auto-Expand**: Tự động co giãn/mở rộng chiều cao ô nhập Description khi gõ hoặc dán (paste) văn bản dài.
+  - [x] **Formatting Toolbar & Live Preview**: Thêm thanh công cụ định dạng nhanh (Bold `**B**`, Header `### H3`, Bullet `•`, Checkmark `✓`, Numbered `1.`) và chế độ Xem trước (Live Preview) trong Admin Form.
+  - [x] **Render Rich Description**: Tích hợp component `FormattedText` giúp trang chi tiết căn hộ `/phong/[id]` hiển thị mô tả chuẩn đẹp mắt với icon, danh sách tiện ích và tiêu đề nổi bật.
+

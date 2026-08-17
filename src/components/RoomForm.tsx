@@ -1,9 +1,10 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 import { Room, RoomInput, RoomStatus } from "@/types/room";
+import FormattedText from "@/components/FormattedText";
 
 interface RoomFormProps {
   initialData?: Room;
@@ -100,6 +101,48 @@ export default function RoomForm({ initialData }: RoomFormProps) {
   );
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [descMode, setDescMode] = useState<"edit" | "preview">("edit");
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+  const adjustTextareaHeight = useCallback(() => {
+    if (textareaRef.current) {
+      textareaRef.current.style.height = "auto";
+      textareaRef.current.style.height = `${Math.max(
+        120,
+        textareaRef.current.scrollHeight
+      )}px`;
+    }
+  }, []);
+
+  useEffect(() => {
+    adjustTextareaHeight();
+  }, [form.description, adjustTextareaHeight]);
+
+  function insertFormat(
+    prefix: string,
+    suffix: string = "",
+    defaultText: string = "text"
+  ) {
+    if (!textareaRef.current) return;
+    const el = textareaRef.current;
+    const start = el.selectionStart;
+    const end = el.selectionEnd;
+    const val = form.description || "";
+    const selected = val.substring(start, end);
+    const replacementText = selected || defaultText;
+    const replacement = `${prefix}${replacementText}${suffix}`;
+    const newVal = val.substring(0, start) + replacement + val.substring(end);
+
+    handleChange("description", newVal);
+
+    setTimeout(() => {
+      el.focus();
+      const selStart = start + prefix.length;
+      const selEnd = selStart + replacementText.length;
+      el.setSelectionRange(selStart, selEnd);
+      adjustTextareaHeight();
+    }, 0);
+  }
 
   useEffect(() => {
     if (initialData?.price) {
@@ -312,16 +355,111 @@ export default function RoomForm({ initialData }: RoomFormProps) {
       </div>
 
       <div>
-        <label className="block text-sm font-semibold text-slate-700 mb-1">
-          Description
-        </label>
-        <textarea
-          rows={4}
-          value={form.description ?? ""}
-          onChange={(e) => handleChange("description", e.target.value)}
-          placeholder="Amenities, policies, furniture, balcony..."
-          className="w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-slate-900 focus:outline-none focus:ring-2 focus:ring-sky-500 text-sm"
-        />
+        <div className="flex items-center justify-between mb-1.5">
+          <label className="block text-sm font-semibold text-slate-700">
+            Description
+          </label>
+          <div className="flex items-center bg-slate-100 p-0.5 rounded-lg text-xs font-semibold">
+            <button
+              type="button"
+              onClick={() => setDescMode("edit")}
+              className={`px-2.5 py-1 rounded-md transition ${
+                descMode === "edit"
+                  ? "bg-white text-slate-900 shadow-sm font-bold"
+                  : "text-slate-500 hover:text-slate-800"
+              }`}
+            >
+              ✏️ Write
+            </button>
+            <button
+              type="button"
+              onClick={() => setDescMode("preview")}
+              className={`px-2.5 py-1 rounded-md transition ${
+                descMode === "preview"
+                  ? "bg-white text-sky-600 shadow-sm font-bold"
+                  : "text-slate-500 hover:text-slate-800"
+              }`}
+            >
+              👁️ Preview
+            </button>
+          </div>
+        </div>
+
+        {descMode === "edit" ? (
+          <div className="border border-slate-300 rounded-xl overflow-hidden focus-within:ring-2 focus-within:ring-sky-500 focus-within:border-sky-500 transition">
+            {/* Formatting Toolbar */}
+            <div className="bg-slate-50 border-b border-slate-200 px-3 py-1.5 flex flex-wrap items-center gap-1.5 text-xs">
+              <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider mr-1">
+                Format:
+              </span>
+              <button
+                type="button"
+                onClick={() => insertFormat("**", "**", "bold text")}
+                className="px-2 py-1 bg-white hover:bg-slate-100 border border-slate-200 rounded text-slate-700 font-bold hover:text-sky-600 transition"
+                title="Add Bold Text"
+              >
+                Bold (**B**)
+              </button>
+              <button
+                type="button"
+                onClick={() => insertFormat("\n### ", "", "Section Header")}
+                className="px-2 py-1 bg-white hover:bg-slate-100 border border-slate-200 rounded text-slate-700 font-bold hover:text-sky-600 transition"
+                title="Add Section Header"
+              >
+                H3 (### Header)
+              </button>
+              <button
+                type="button"
+                onClick={() => insertFormat("\n• ", "", "Bullet point")}
+                className="px-2 py-1 bg-white hover:bg-slate-100 border border-slate-200 rounded text-slate-700 font-medium hover:text-sky-600 transition"
+                title="Add Bullet Point"
+              >
+                • Bullet
+              </button>
+              <button
+                type="button"
+                onClick={() => insertFormat("\n✓ ", "", "Feature / Amenity")}
+                className="px-2 py-1 bg-white hover:bg-slate-100 border border-slate-200 rounded text-emerald-700 font-semibold hover:text-emerald-800 transition"
+                title="Add Checkmark Amenity"
+              >
+                ✓ Checkmark
+              </button>
+              <button
+                type="button"
+                onClick={() => insertFormat("\n1. ", "", "First item")}
+                className="px-2 py-1 bg-white hover:bg-slate-100 border border-slate-200 rounded text-slate-700 font-medium hover:text-sky-600 transition"
+                title="Add Numbered List"
+              >
+                1. Numbered
+              </button>
+            </div>
+
+            <textarea
+              ref={textareaRef}
+              rows={4}
+              value={form.description ?? ""}
+              onChange={(e) => {
+                handleChange("description", e.target.value);
+                adjustTextareaHeight();
+              }}
+              onPaste={() => {
+                setTimeout(adjustTextareaHeight, 0);
+              }}
+              placeholder="Amenities, policies, furniture, balcony... (Auto-expands when typing or pasting)"
+              className="w-full px-3.5 py-2.5 text-slate-900 focus:outline-none text-sm resize-none overflow-hidden min-h-[120px]"
+            />
+          </div>
+        ) : (
+          <div className="bg-slate-50 border border-slate-200 rounded-xl p-4 min-h-[120px]">
+            {form.description?.trim() ? (
+              <FormattedText text={form.description} />
+            ) : (
+              <p className="text-slate-400 text-xs italic">
+                No description entered yet. Switch to &quot;Write&quot; mode to type or paste text.
+              </p>
+            )}
+          </div>
+        )}
       </div>
 
       <div>

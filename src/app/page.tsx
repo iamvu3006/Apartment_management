@@ -122,6 +122,30 @@ export default function HomePage() {
     });
   }, [rooms, filters]);
 
+  const [currentPage, setCurrentPage] = useState(1);
+  const ITEMS_PER_PAGE = 6;
+
+  // Reset to page 1 whenever filters change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [filters]);
+
+  const totalPages = Math.max(1, Math.ceil(filteredRooms.length / ITEMS_PER_PAGE));
+
+  const paginatedRooms = useMemo(() => {
+    const startIdx = (currentPage - 1) * ITEMS_PER_PAGE;
+    return filteredRooms.slice(startIdx, startIdx + ITEMS_PER_PAGE);
+  }, [filteredRooms, currentPage]);
+
+  function handlePageChange(page: number) {
+    if (page < 1 || page > totalPages) return;
+    setCurrentPage(page);
+    const element = document.getElementById("listings-section");
+    if (element) {
+      element.scrollIntoView({ behavior: "smooth" });
+    }
+  }
+
   return (
     <div className="min-h-screen flex flex-col bg-slate-50">
       {/* Header Top Bar */}
@@ -320,11 +344,16 @@ export default function HomePage() {
 
         {/* Results Counter & Property Grid */}
         {!loading && filteredRooms.length > 0 && (
-          <>
+          <div id="listings-section" className="scroll-mt-24">
             <div className="flex items-center justify-between mb-4">
               <p className="text-xs sm:text-sm font-semibold text-slate-600">
-                Found{" "}
+                Showing{" "}
                 <span className="text-sky-600 font-bold">
+                  {(currentPage - 1) * ITEMS_PER_PAGE + 1} -{" "}
+                  {Math.min(currentPage * ITEMS_PER_PAGE, filteredRooms.length)}
+                </span>{" "}
+                of{" "}
+                <span className="text-slate-900 font-bold">
                   {filteredRooms.length}
                 </span>{" "}
                 available properties
@@ -333,7 +362,7 @@ export default function HomePage() {
 
             {/* Property Cards Grid */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {filteredRooms.map((room) => {
+              {paginatedRooms.map((room) => {
                 const isFav = isFavorite(room.id);
                 return (
                   <div
@@ -455,7 +484,52 @@ export default function HomePage() {
                 );
               })}
             </div>
-          </>
+
+            {/* Pagination Controls */}
+            {totalPages > 1 && (
+              <div className="mt-10 flex flex-col sm:flex-row items-center justify-between gap-4 bg-white border border-slate-200/80 rounded-2xl p-4 shadow-sm">
+                <p className="text-xs text-slate-500 font-medium">
+                  Page <span className="font-bold text-slate-900">{currentPage}</span> of{" "}
+                  <span className="font-bold text-slate-900">{totalPages}</span>
+                </p>
+
+                <div className="flex items-center gap-1.5">
+                  {/* Prev Button */}
+                  <button
+                    onClick={() => handlePageChange(currentPage - 1)}
+                    disabled={currentPage === 1}
+                    className="px-3 py-1.5 rounded-xl border border-slate-200 text-xs font-semibold text-slate-700 hover:bg-slate-50 disabled:opacity-40 disabled:hover:bg-white transition flex items-center gap-1"
+                  >
+                    ← Prev
+                  </button>
+
+                  {/* Page numbers */}
+                  {Array.from({ length: totalPages }, (_, i) => i + 1).map((pageNum) => (
+                    <button
+                      key={pageNum}
+                      onClick={() => handlePageChange(pageNum)}
+                      className={`w-8 h-8 rounded-xl text-xs font-extrabold transition ${
+                        currentPage === pageNum
+                          ? "bg-sky-600 text-white shadow-sm"
+                          : "border border-slate-200 text-slate-700 hover:bg-slate-50"
+                      }`}
+                    >
+                      {pageNum}
+                    </button>
+                  ))}
+
+                  {/* Next Button */}
+                  <button
+                    onClick={() => handlePageChange(currentPage + 1)}
+                    disabled={currentPage === totalPages}
+                    className="px-3 py-1.5 rounded-xl border border-slate-200 text-xs font-semibold text-slate-700 hover:bg-slate-50 disabled:opacity-40 disabled:hover:bg-white transition flex items-center gap-1"
+                  >
+                    Next →
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
         )}
       </main>
 

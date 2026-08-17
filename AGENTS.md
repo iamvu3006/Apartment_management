@@ -33,14 +33,15 @@ Schema đầy đủ + RLS policies: xem `supabase/schema.sql`. **Không sửa sc
 2. **Không có middleware bảo vệ route `/admin`** — hiện route này public 100%, ai có link cũng vào sửa được, không chỉ là vấn đề RLS.
 3. Supabase project hiện tại: `iamvu3006's Project` (dùng riêng cho app này, **không phải** project WorkKPI — đã tách ra sau khi lỡ chạy nhầm schema vào project WorkKPI).
 
-## Roadmap (theo độ ưu tiên)
+## Roadmap & Status
 
-1. **Auth cho `/admin`** — Supabase Auth, 1 tài khoản duy nhất (chủ web), redirect nếu chưa login, siết lại RLS.
-2. **Trang chi tiết phòng** `/phong/[id]` — full ảnh, mô tả, nút liên hệ.
-3. **Nút liên hệ nhanh** — `tel:`, `https://zalo.me/<sđt>`, `https://wa.me/<sđt>`, link Facebook.
-4. **Filter/search** trên trang public — theo giá, khu vực, loại phòng, trạng thái.
-5. **Deploy Vercel** — thêm env vars trên Vercel dashboard, kết nối GitHub repo.
-6. (Optional) Bản đồ Google Maps embed theo địa chỉ phòng.
+1. **Auth cho `/admin`** — [x] Supabase Auth, login email/password, middleware bảo vệ route.
+2. **Trang chi tiết phòng** `/phong/[id]` — [x] Carousel ảnh, mô tả phong phú (FormattedText), nút liên hệ.
+3. **Nút liên hệ nhanh** — [x] `tel:`, Zalo, WhatsApp, Facebook cho 2 tư vấn viên (Vũ & Hân Mỹ).
+4. **Filter/search & Phân trang** — [x] Lọc giá (VND/USD), quận, loại phòng, trạng thái, tìm từ khoá & phân trang (6 phòng/trang).
+5. **Form Admin & Description Formatter** — [x] Tự động chèn dấu chấm giá tiền, ô Description tự động mở rộng (auto-expand) khi gõ/dán văn bản dài, toolbar định dạng (Bold, H3, Bullet, Checkmark, Numbered) & live preview.
+6. **Bản đồ CartoDB Voyager & 5 Ngôn ngữ** — [x] 🇬🇧 EN, 🇰🇷 KO, 🇨🇳 ZH, 🇷🇺 RU, 🇻🇳 VI.
+7. **Deploy Vercel** — [x] Deploy live tại `https://apartment-management-topaz.vercel.app`.
 
 ## Không được làm
 

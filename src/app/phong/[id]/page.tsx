@@ -6,6 +6,7 @@ import { supabase } from "@/lib/supabase";
 import { Room, STATUS_LABELS, STATUS_COLORS } from "@/types/room";
 import { CONTACT_CONFIG } from "@/config/contact";
 import { useApp, LANGUAGES, Language } from "@/context/AppContext";
+import FormattedText from "@/components/FormattedText";
 
 export default function RoomDetailPage({
   params,
@@ -330,8 +331,14 @@ export default function RoomDetailPage({
                   <span className="w-1.5 h-4 bg-sky-600 rounded-full"></span>
                   Property Description
                 </h2>
-                <div className="text-slate-700 text-sm leading-relaxed whitespace-pre-line bg-slate-50/50 p-4 rounded-xl border border-slate-100">
-                  {room.description || "No description provided."}
+                <div className="bg-slate-50/50 p-4 sm:p-5 rounded-2xl border border-slate-100">
+                  {room.description ? (
+                    <FormattedText text={room.description} />
+                  ) : (
+                    <p className="text-slate-400 text-sm italic">
+                      No description provided for this listing.
+                    </p>
+                  )}
                 </div>
               </div>
             </div>
