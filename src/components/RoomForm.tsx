@@ -90,12 +90,14 @@ export default function RoomForm({ initialData }: RoomFormProps) {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const adjustTextareaHeight = useCallback(() => {
-    if (textareaRef.current) {
-      textareaRef.current.style.height = "auto";
-      textareaRef.current.style.height = `${Math.max(
-        120,
-        textareaRef.current.scrollHeight
-      )}px`;
+    const el = textareaRef.current;
+    if (!el) return;
+    const currentScroll = window.scrollY;
+    el.style.height = "auto";
+    const targetHeight = Math.max(120, el.scrollHeight);
+    el.style.height = `${targetHeight}px`;
+    if (window.scrollY !== currentScroll) {
+      window.scrollTo({ top: currentScroll, behavior: "instant" });
     }
   }, []);
 
@@ -103,28 +105,86 @@ export default function RoomForm({ initialData }: RoomFormProps) {
     adjustTextareaHeight();
   }, [form.description, adjustTextareaHeight]);
 
-  function insertFormat(
-    prefix: string,
-    suffix: string = "",
-    defaultText: string = "text"
-  ) {
+  function applyFormat(type: "bold" | "h3" | "bullet" | "checkmark" | "numbered") {
     if (!textareaRef.current) return;
     const el = textareaRef.current;
     const start = el.selectionStart;
     const end = el.selectionEnd;
     const val = form.description || "";
     const selected = val.substring(start, end);
-    const replacementText = selected || defaultText;
-    const replacement = `${prefix}${replacementText}${suffix}`;
-    const newVal = val.substring(0, start) + replacement + val.substring(end);
 
+    let replacement = "";
+    let newSelectionStart = start;
+    let newSelectionEnd = end;
+
+    if (selected.length > 0) {
+      // Highlighted text selection (supports multi-line selection)
+      if (type === "bold") {
+        replacement = `**${selected}**`;
+        newSelectionStart = start;
+        newSelectionEnd = start + replacement.length;
+      } else {
+        const lines = selected.split("\n");
+        let itemNum = 1;
+
+        const formattedLines = lines.map((line) => {
+          if (!line.trim()) return line;
+          // Strip pre-existing bullet / checkmark / number / header if re-formatting
+          const cleanLine = line.replace(/^(\s*)([•*\-✓✔]|\d+\.|\#+)\s*/, "$1");
+
+          if (type === "bullet") {
+            return `• ${cleanLine}`;
+          } else if (type === "checkmark") {
+            return `✓ ${cleanLine}`;
+          } else if (type === "numbered") {
+            const numLine = `${itemNum}. ${cleanLine}`;
+            itemNum++;
+            return numLine;
+          } else if (type === "h3") {
+            return `### ${cleanLine}`;
+          }
+          return line;
+        });
+
+        replacement = formattedLines.join("\n");
+        newSelectionStart = start;
+        newSelectionEnd = start + replacement.length;
+      }
+    } else {
+      // Empty selection: Insert template at cursor position
+      let prefix = "";
+      let defaultText = "";
+
+      if (type === "bold") {
+        replacement = "**bold text**";
+        newSelectionStart = start + 2;
+        newSelectionEnd = start + 11;
+      } else {
+        if (type === "h3") {
+          prefix = "\n### ";
+          defaultText = "Section Header";
+        } else if (type === "bullet") {
+          prefix = "\n• ";
+          defaultText = "Bullet point";
+        } else if (type === "checkmark") {
+          prefix = "\n✓ ";
+          defaultText = "Feature / Amenity";
+        } else if (type === "numbered") {
+          prefix = "\n1. ";
+          defaultText = "First item";
+        }
+        replacement = `${prefix}${defaultText}`;
+        newSelectionStart = start + prefix.length;
+        newSelectionEnd = newSelectionStart + defaultText.length;
+      }
+    }
+
+    const newVal = val.substring(0, start) + replacement + val.substring(end);
     handleChange("description", newVal);
 
     setTimeout(() => {
       el.focus();
-      const selStart = start + prefix.length;
-      const selEnd = selStart + replacementText.length;
-      el.setSelectionRange(selStart, selEnd);
+      el.setSelectionRange(newSelectionStart, newSelectionEnd);
       adjustTextareaHeight();
     }, 0);
   }
@@ -379,41 +439,41 @@ export default function RoomForm({ initialData }: RoomFormProps) {
               </span>
               <button
                 type="button"
-                onClick={() => insertFormat("**", "**", "bold text")}
-                className="px-2 py-1 bg-white hover:bg-slate-100 border border-slate-200 rounded text-slate-700 font-bold hover:text-sky-600 transition"
-                title="Add Bold Text"
+                onClick={() => applyFormat("bold")}
+                className="px-2.5 py-1 bg-white hover:bg-slate-100 border border-slate-200 rounded text-slate-700 font-bold hover:text-sky-600 transition shadow-2xs"
+                title="Format bold or wrap selection"
               >
                 Bold (**B**)
               </button>
               <button
                 type="button"
-                onClick={() => insertFormat("\n### ", "", "Section Header")}
-                className="px-2 py-1 bg-white hover:bg-slate-100 border border-slate-200 rounded text-slate-700 font-bold hover:text-sky-600 transition"
-                title="Add Section Header"
+                onClick={() => applyFormat("h3")}
+                className="px-2.5 py-1 bg-white hover:bg-slate-100 border border-slate-200 rounded text-slate-700 font-bold hover:text-sky-600 transition shadow-2xs"
+                title="Format header or prefix selected lines"
               >
                 H3 (### Header)
               </button>
               <button
                 type="button"
-                onClick={() => insertFormat("\n• ", "", "Bullet point")}
-                className="px-2 py-1 bg-white hover:bg-slate-100 border border-slate-200 rounded text-slate-700 font-medium hover:text-sky-600 transition"
-                title="Add Bullet Point"
+                onClick={() => applyFormat("bullet")}
+                className="px-2.5 py-1 bg-white hover:bg-slate-100 border border-slate-200 rounded text-slate-700 font-semibold hover:text-sky-600 transition shadow-2xs"
+                title="Format bullet points for all selected lines"
               >
                 • Bullet
               </button>
               <button
                 type="button"
-                onClick={() => insertFormat("\n✓ ", "", "Feature / Amenity")}
-                className="px-2 py-1 bg-white hover:bg-slate-100 border border-slate-200 rounded text-emerald-700 font-semibold hover:text-emerald-800 transition"
-                title="Add Checkmark Amenity"
+                onClick={() => applyFormat("checkmark")}
+                className="px-2.5 py-1 bg-white hover:bg-slate-100 border border-slate-200 rounded text-emerald-700 font-semibold hover:text-emerald-800 transition shadow-2xs"
+                title="Format checkmarks for all selected lines"
               >
                 ✓ Checkmark
               </button>
               <button
                 type="button"
-                onClick={() => insertFormat("\n1. ", "", "First item")}
-                className="px-2 py-1 bg-white hover:bg-slate-100 border border-slate-200 rounded text-slate-700 font-medium hover:text-sky-600 transition"
-                title="Add Numbered List"
+                onClick={() => applyFormat("numbered")}
+                className="px-2.5 py-1 bg-white hover:bg-slate-100 border border-slate-200 rounded text-slate-700 font-semibold hover:text-sky-600 transition shadow-2xs"
+                title="Format numbered list (1, 2, 3...) for selected lines"
               >
                 1. Numbered
               </button>
