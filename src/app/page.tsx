@@ -274,7 +274,7 @@ export default function HomePage() {
           {/* Quick tags */}
           <div className="flex flex-wrap items-center justify-center gap-2 text-xs text-slate-400 pt-2">
             <span className="text-slate-500 font-medium">Quick search:</span>
-            {["Son Tra", "Hai Chau", "Studio", "Pham Kiet"].map((tag) => (
+            {["Hải Châu", "Sơn Trà", "Hòa Cường", "Studio"].map((tag) => (
               <button
                 key={tag}
                 onClick={() =>

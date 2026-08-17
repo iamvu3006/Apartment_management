@@ -37,13 +37,16 @@ export const PRESET_PROPERTY_TYPES = [
 ];
 
 export const PRESET_DISTRICTS = [
-  "Son Tra",
-  "Hai Chau",
-  "Ngu Hanh Son",
-  "Thanh Khe",
-  "Lien Chieu",
-  "Cam Le",
-  "Hoa Vang",
+  "Phường Hải Châu",
+  "Phường Hòa Cường",
+  "Phường Thanh Khê",
+  "Phường An Khê",
+  "Phường An Hải",
+  "Phường Sơn Trà",
+  "Phường Ngũ Hành Sơn",
+  "Phường Hòa Khánh",
+  "Phường Liên Chiểu",
+  "Phường Cẩm Lệ",
 ];
 
 function formatNumberWithDots(val: number | string): string {
