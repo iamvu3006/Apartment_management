@@ -11,16 +11,16 @@ interface RoomFormProps {
 }
 
 export const DANANG_DISTRICTS = [
-  "Phường Hải Châu",
-  "Phường Hòa Cường",
-  "Phường Thanh Khê",
-  "Phường An Khê",
-  "Phường An Hải",
-  "Phường Sơn Trà",
-  "Phường Ngũ Hành Sơn",
-  "Phường Hòa Khánh",
-  "Phường Liên Chiểu",
-  "Phường Cẩm Lệ",
+  "Hai Chau District",
+  "Hoa Cuong District",
+  "Thanh Khe District",
+  "An Khe District",
+  "An Hai District",
+  "Son Tra District",
+  "Ngu Hanh Son District",
+  "Hoa Khanh District",
+  "Lien Chieu District",
+  "Cam Le District",
 ];
 
 export const PROPERTY_TYPES = [
@@ -35,7 +35,7 @@ const emptyForm: RoomInput = {
   price: 0,
   area: 0,
   address: "",
-  district: "Phường Hải Châu",
+  district: "Hai Chau District",
   room_type: "Studio",
   status: "trong",
   description: "",
@@ -66,7 +66,7 @@ export default function RoomForm({ initialData }: RoomFormProps) {
           price: initialData.price,
           area: initialData.area,
           address: initialData.address,
-          district: initialData.district || "Phường Hải Châu",
+          district: initialData.district || "Hai Chau District",
           room_type: initialData.room_type || "Studio",
           status: initialData.status,
           description: initialData.description ?? "",
