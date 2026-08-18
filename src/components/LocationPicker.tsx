@@ -128,13 +128,9 @@ export default function LocationPicker({
     }
   }, [latitude, longitude]);
 
-  // Geocode address helper button
+  // Geocode address helper button with smart fallbacks
   async function searchLocationOnMap() {
-    const queryStr = [address, district, "Đà Nẵng", "Việt Nam"]
-      .filter(Boolean)
-      .join(", ");
-
-    if (!queryStr.trim()) {
+    if (!address && !district) {
       setSearchMsg("Please enter street address or district first.");
       return;
     }
@@ -142,41 +138,60 @@ export default function LocationPicker({
     setSearching(true);
     setSearchMsg(null);
 
-    try {
-      const res = await fetch(
-        `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(
-          queryStr
-        )}&format=json&limit=1`,
-        {
-          headers: {
-            "User-Agent": "DaNangHomes/1.0",
-          },
-        }
-      );
+    // Clean house number or prefixes to extract main street name
+    const rawAddress = (address || "").trim();
+    const streetOnly = rawAddress
+      .replace(/^(\d+[\/\d]*|kiệt\s*\d+[\/\d]*|hẻm\s*\d+[\/\d]*)\s*/gi, "")
+      .replace(/\bstreet\b/gi, "")
+      .replace(/\bst\b/gi, "")
+      .replace(/\bđường\b/gi, "")
+      .trim();
 
-      if (res.ok) {
-        const data = await res.json();
-        if (data && data.length > 0) {
-          const lat = Number(parseFloat(data[0].lat).toFixed(6));
-          const lng = Number(parseFloat(data[0].lon).toFixed(6));
+    const queries = [
+      [rawAddress, district, "Đà Nẵng", "Việt Nam"].filter(Boolean).join(", "),
+      [`Đường ${streetOnly}`, district, "Đà Nẵng", "Việt Nam"].filter(Boolean).join(", "),
+      [`Đường ${streetOnly}`, "Đà Nẵng", "Việt Nam"].filter(Boolean).join(", "),
+      [`${streetOnly} Street`, "Da Nang", "Vietnam"].filter(Boolean).join(", "),
+      [district, "Đà Nẵng", "Việt Nam"].filter(Boolean).join(", "),
+    ];
 
-          setCoords([lat, lng]);
-          onChange(lat, lng);
-
-          if (markerRef.current && mapRef.current) {
-            markerRef.current.setLatLng([lat, lng]);
-            mapRef.current.setView([lat, lng], 16);
+    for (const queryStr of queries) {
+      if (!queryStr.trim()) continue;
+      try {
+        const res = await fetch(
+          `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(
+            queryStr
+          )}&format=json&limit=1`,
+          {
+            headers: {
+              "User-Agent": "DaNangHomes/1.0",
+            },
           }
-          setSearchMsg("✓ Found location suggestion! Drag marker to fine-tune building pin.");
-        } else {
-          setSearchMsg("Could not locate exact street. Click directly on map to set pin.");
+        );
+
+        if (res.ok) {
+          const data = await res.json();
+          if (data && data.length > 0) {
+            const lat = Number(parseFloat(data[0].lat).toFixed(6));
+            const lng = Number(parseFloat(data[0].lon).toFixed(6));
+
+            setCoords([lat, lng]);
+            onChange(lat, lng);
+
+            if (markerRef.current && mapRef.current) {
+              markerRef.current.setLatLng([lat, lng]);
+              mapRef.current.setView([lat, lng], 16);
+            }
+            setSearchMsg("✓ Found location on map! You can drag the blue pin to fine-tune exact building.");
+            setSearching(false);
+            return;
+          }
         }
-      }
-    } catch {
-      setSearchMsg("Search service unavailable. Click directly on map to set pin.");
-    } finally {
-      setSearching(false);
+      } catch {}
     }
+
+    setSearchMsg("Could not locate street automatically. Click directly on map to set pin.");
+    setSearching(false);
   }
 
   return (
