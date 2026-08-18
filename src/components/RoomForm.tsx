@@ -260,30 +260,52 @@ export default function RoomForm({ initialData }: RoomFormProps) {
       const newImageUrls = await uploadImages();
       const finalImages = [...existingImages, ...newImageUrls];
 
-      const payload: RoomInput = {
+      const payload: Record<string, any> = {
         ...form,
         price: Number(form.price),
         area: Number(form.area),
         images: finalImages,
       };
 
+      // Clean null or undefined lat/lng values
+      if (payload.latitude === null || payload.latitude === undefined) delete payload.latitude;
+      if (payload.longitude === null || payload.longitude === undefined) delete payload.longitude;
+
       if (isEditMode && initialData) {
-        const { error: updateError } = await supabase
+        let { error: updateError } = await supabase
           .from("rooms")
           .update(payload)
           .eq("id", initialData.id);
+
+        // Fallback retry without lat/lng if DB schema cache lacks lat/lng columns
+        if (updateError && (payload.latitude !== undefined || payload.longitude !== undefined)) {
+          delete payload.latitude;
+          delete payload.longitude;
+          const retry = await supabase.from("rooms").update(payload).eq("id", initialData.id);
+          updateError = retry.error;
+        }
+
         if (updateError) throw updateError;
       } else {
-        const { error: insertError } = await supabase
+        let { error: insertError } = await supabase
           .from("rooms")
           .insert(payload);
+
+        // Fallback retry without lat/lng if DB schema cache lacks lat/lng columns
+        if (insertError && (payload.latitude !== undefined || payload.longitude !== undefined)) {
+          delete payload.latitude;
+          delete payload.longitude;
+          const retry = await supabase.from("rooms").insert(payload);
+          insertError = retry.error;
+        }
+
         if (insertError) throw insertError;
       }
 
-      router.push("/admin");
-      router.refresh();
+      window.location.href = "/admin";
     } catch (err) {
       setError(err instanceof Error ? err.message : "An error occurred");
+      window.scrollTo({ top: 0, behavior: "smooth" });
     } finally {
       setUploading(false);
     }
