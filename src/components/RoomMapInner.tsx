@@ -139,8 +139,8 @@ export default function RoomMapInner({ rooms }: RoomMapInnerProps) {
   }, [rooms, coordsMap, currency, formatPrice, t]);
 
   return (
-    <div className="relative w-full h-[520px] rounded-2xl overflow-hidden border border-slate-200 shadow-sm z-10">
-      <div ref={mapContainerRef} className="w-full h-full" />
+    <div className="relative w-full h-[520px] rounded-2xl overflow-hidden border border-slate-200 shadow-sm isolate z-0">
+      <div ref={mapContainerRef} className="w-full h-full z-0" />
     </div>
   );
 }

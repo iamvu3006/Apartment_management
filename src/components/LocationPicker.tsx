@@ -212,10 +212,10 @@ export default function LocationPicker({
       )}
 
       {/* Map Box */}
-      <div className="relative w-full h-64 rounded-xl border border-slate-300 overflow-hidden shadow-sm">
-        <div ref={mapContainerRef} className="w-full h-full z-10" />
+      <div className="relative w-full h-64 rounded-xl border border-slate-300 overflow-hidden shadow-sm isolate z-0">
+        <div ref={mapContainerRef} className="w-full h-full z-0" />
 
-        <div className="absolute bottom-2 left-2 z-20 bg-slate-900/80 text-white text-[11px] font-mono px-2.5 py-1 rounded-md backdrop-blur-sm shadow">
+        <div className="absolute bottom-2 left-2 z-10 bg-slate-900/80 text-white text-[11px] font-mono px-2.5 py-1 rounded-md backdrop-blur-sm shadow">
           Lat: {coords[0]} | Lng: {coords[1]}
         </div>
       </div>

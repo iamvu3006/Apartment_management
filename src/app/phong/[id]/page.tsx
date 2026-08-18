@@ -91,7 +91,7 @@ export default function RoomDetailPage({
   return (
     <div className="min-h-screen bg-slate-50 flex flex-col pb-24 lg:pb-12">
       {/* Header Navigation */}
-      <header className="bg-slate-900 text-white sticky top-0 z-30 border-b border-slate-800 shadow-md">
+      <header className="bg-slate-900 text-white sticky top-0 z-50 border-b border-slate-800 shadow-md">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
           <Link
             href="/"
