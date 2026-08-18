@@ -7,6 +7,7 @@ import { Room, STATUS_LABELS, STATUS_COLORS } from "@/types/room";
 import { CONTACT_CONFIG } from "@/config/contact";
 import { useApp, LANGUAGES, Language } from "@/context/AppContext";
 import FormattedText from "@/components/FormattedText";
+import RoomMap from "@/components/RoomMap";
 
 export default function RoomDetailPage({
   params,
@@ -340,6 +341,15 @@ export default function RoomDetailPage({
                     </p>
                   )}
                 </div>
+              </div>
+
+              {/* Property Location Map */}
+              <div className="pt-2">
+                <h2 className="text-base font-bold text-slate-900 mb-3 flex items-center gap-2">
+                  <span className="w-1.5 h-4 bg-sky-600 rounded-full"></span>
+                  Property Location Map
+                </h2>
+                <RoomMap rooms={[room]} />
               </div>
             </div>
           </div>

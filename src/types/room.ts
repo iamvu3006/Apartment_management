@@ -11,6 +11,8 @@ export interface Room {
   status: RoomStatus;
   description: string | null;
   images: string[];
+  latitude?: number | null;
+  longitude?: number | null;
   created_at: string;
 }
 

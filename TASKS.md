@@ -62,3 +62,9 @@
   - [x] **Formatting Toolbar & Live Preview**: Thêm thanh công cụ định dạng nhanh (Bold `**B**`, Header `### H3`, Bullet `•`, Checkmark `✓`, Numbered `1.`) và chế độ Xem trước (Live Preview) trong Admin Form.
   - [x] **Render Rich Description**: Tích hợp component `FormattedText` giúp trang chi tiết căn hộ `/phong/[id]` hiển thị mô tả chuẩn đẹp mắt với icon, danh sách tiện ích và tiêu đề nổi bật.
 
+- [x] **Task 12: Bản Đồ Chuẩn Xoá Bỏ Đoán Toạ Độ (Admin Location Picker & DB Lat/Lng Storage)**
+  - [x] **Toạ Độ Chuẩn Supabase**: Bổ sung 2 cột `latitude` & `longitude` vào bảng `rooms` trong `supabase/schema.sql`.
+  - [x] **LocationPicker Mini-Map trong Admin Form**: Tích hợp ô chọn vị trí bản đồ tương tác trong `/admin/new` & `/admin/[id]/edit` hỗ trợ click chọn vị trí hoặc kéo thả ghim (drag marker) chính xác 100% tòa nhà. Tự động gợi ý ghim vị trí theo địa chỉ nhập.
+  - [x] **Hiển Thị Map View Tức Thì**: Mở lại bộ chuyển đổi **Danh Sách ↔ Map View** trên Trang chủ (`/`) hiển thị pin giá tiền với độ chính xác cao tuyệt đối từ DB.
+  - [x] **Chi Tiết Phòng Location Map**: Tích hợp mini-map hiển thị vị trí căn hộ trên trang chi tiết `/phong/[id]`.
+

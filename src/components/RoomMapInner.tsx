@@ -17,7 +17,7 @@ export default function RoomMapInner({ rooms }: RoomMapInnerProps) {
   const { currency, formatPrice, t } = useApp();
   const [coordsMap, setCoordsMap] = useState<Record<string, [number, number]>>({});
 
-  // 1. Geocode all room addresses asynchronously
+  // 1. Resolve room coordinates: Prioritize DB stored latitude & longitude
   useEffect(() => {
     let isMounted = true;
 
@@ -26,8 +26,21 @@ export default function RoomMapInner({ rooms }: RoomMapInnerProps) {
 
       for (let i = 0; i < rooms.length; i++) {
         const room = rooms[i];
-        const coords = await geocodeAddress(room.address || room.title, room.district, i);
-        newMap[room.id] = coords;
+        if (
+          room.latitude &&
+          room.longitude &&
+          !isNaN(Number(room.latitude)) &&
+          !isNaN(Number(room.longitude))
+        ) {
+          newMap[room.id] = [Number(room.latitude), Number(room.longitude)];
+        } else {
+          const coords = await geocodeAddress(
+            room.address || room.title,
+            room.district,
+            i
+          );
+          newMap[room.id] = coords;
+        }
       }
 
       if (isMounted) {
@@ -46,18 +59,21 @@ export default function RoomMapInner({ rooms }: RoomMapInnerProps) {
   useEffect(() => {
     if (!mapContainerRef.current) return;
 
-    // Initialize Leaflet map with standard OpenStreetMap tiles
+    // Initialize Leaflet map with CartoDB Voyager tiles
     if (!mapInstanceRef.current) {
       const map = L.map(mapContainerRef.current, {
-        center: [16.0544, 108.2300], // Da Nang Dragon Bridge center
+        center: [16.0544, 108.2300], // Da Nang center
         zoom: 14,
         scrollWheelZoom: true,
       });
 
-      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-        maxZoom: 19,
-      }).addTo(map);
+      L.tileLayer(
+        "https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png",
+        {
+          attribution: '&copy; <a href="https://carto.com/">CARTO</a>',
+          maxZoom: 19,
+        }
+      ).addTo(map);
 
       mapInstanceRef.current = map;
     }

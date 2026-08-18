@@ -2,9 +2,19 @@
 
 import { useState, useEffect, useRef, useCallback } from "react";
 import { useRouter } from "next/navigation";
+import dynamic from "next/dynamic";
 import { supabase } from "@/lib/supabase";
 import { Room, RoomInput, RoomStatus } from "@/types/room";
 import FormattedText from "@/components/FormattedText";
+
+const LocationPicker = dynamic(() => import("@/components/LocationPicker"), {
+  ssr: false,
+  loading: () => (
+    <div className="w-full h-64 rounded-xl bg-slate-100 animate-pulse flex items-center justify-center text-xs text-slate-400 font-medium">
+      Loading Location Map...
+    </div>
+  ),
+});
 
 interface RoomFormProps {
   initialData?: Room;
@@ -40,6 +50,8 @@ const emptyForm: RoomInput = {
   status: "trong",
   description: "",
   images: [],
+  latitude: null,
+  longitude: null,
 };
 
 // Format numeric value with dot thousands separator (e.g. 15.000.000)
@@ -71,6 +83,8 @@ export default function RoomForm({ initialData }: RoomFormProps) {
           status: initialData.status,
           description: initialData.description ?? "",
           images: initialData.images,
+          latitude: initialData.latitude ?? null,
+          longitude: initialData.longitude ?? null,
         }
       : emptyForm
   );
@@ -347,6 +361,16 @@ export default function RoomForm({ initialData }: RoomFormProps) {
           className="w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-slate-900 focus:outline-none focus:ring-2 focus:ring-sky-500 text-sm"
         />
       </div>
+
+      <LocationPicker
+        latitude={form.latitude}
+        longitude={form.longitude}
+        address={form.address}
+        district={form.district}
+        onChange={(lat, lng) => {
+          setForm((prev) => ({ ...prev, latitude: lat, longitude: lng }));
+        }}
+      />
 
       <div className="grid grid-cols-2 gap-4">
         <div>

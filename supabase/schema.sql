@@ -11,8 +11,13 @@ create table if not exists rooms (
   status text not null default 'trong' check (status in ('trong', 'da_coc', 'da_thue')),
   description text,
   images text[] not null default '{}',
+  latitude numeric,
+  longitude numeric,
   created_at timestamptz not null default now()
 );
+
+alter table rooms add column if not exists latitude numeric;
+alter table rooms add column if not exists longitude numeric;
 
 -- Bật Row Level Security
 alter table rooms enable row level security;

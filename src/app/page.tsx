@@ -5,6 +5,7 @@ import Link from "next/link";
 import { supabase } from "@/lib/supabase";
 import { Room, STATUS_LABELS, STATUS_COLORS } from "@/types/room";
 import RoomFilter, { FilterState } from "@/components/RoomFilter";
+import RoomMap from "@/components/RoomMap";
 import { CONTACT_CONFIG } from "@/config/contact";
 import { useApp, LANGUAGES, Language } from "@/context/AppContext";
 
@@ -22,6 +23,7 @@ export default function HomePage() {
   const [rooms, setRooms] = useState<Room[]>([]);
   const [loading, setLoading] = useState(true);
   const [filters, setFilters] = useState<FilterState>(initialFilters);
+  const [viewMode, setViewMode] = useState<"grid" | "map">("grid");
 
   const {
     currency,
@@ -342,26 +344,73 @@ export default function HomePage() {
           </div>
         )}
 
-        {/* Results Counter & Property Grid */}
+        {/* Results Counter & View Switcher */}
         {!loading && filteredRooms.length > 0 && (
           <div id="listings-section" className="scroll-mt-24">
-            <div className="flex items-center justify-between mb-4">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-5">
               <p className="text-xs sm:text-sm font-semibold text-slate-600">
-                Showing{" "}
-                <span className="text-sky-600 font-bold">
-                  {(currentPage - 1) * ITEMS_PER_PAGE + 1} -{" "}
-                  {Math.min(currentPage * ITEMS_PER_PAGE, filteredRooms.length)}
-                </span>{" "}
-                of{" "}
-                <span className="text-slate-900 font-bold">
-                  {filteredRooms.length}
-                </span>{" "}
-                available properties
+                {viewMode === "grid" ? (
+                  <>
+                    Showing{" "}
+                    <span className="text-sky-600 font-bold">
+                      {(currentPage - 1) * ITEMS_PER_PAGE + 1} -{" "}
+                      {Math.min(currentPage * ITEMS_PER_PAGE, filteredRooms.length)}
+                    </span>{" "}
+                    of{" "}
+                    <span className="text-slate-900 font-bold">
+                      {filteredRooms.length}
+                    </span>{" "}
+                    available properties
+                  </>
+                ) : (
+                  <>
+                    Showing{" "}
+                    <span className="text-sky-600 font-bold">
+                      {filteredRooms.length}
+                    </span>{" "}
+                    properties on Da Nang Map
+                  </>
+                )}
               </p>
+
+              {/* View Switcher Controls */}
+              <div className="flex items-center bg-slate-200/80 p-1 rounded-xl text-xs font-bold self-start sm:self-auto shadow-inner">
+                <button
+                  onClick={() => setViewMode("grid")}
+                  className={`px-3 py-1.5 rounded-lg transition flex items-center gap-1.5 ${
+                    viewMode === "grid"
+                      ? "bg-white text-slate-900 shadow-sm"
+                      : "text-slate-600 hover:text-slate-900"
+                  }`}
+                >
+                  <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+                  </svg>
+                  <span>Cards</span>
+                </button>
+                <button
+                  onClick={() => setViewMode("map")}
+                  className={`px-3 py-1.5 rounded-lg transition flex items-center gap-1.5 ${
+                    viewMode === "map"
+                      ? "bg-sky-600 text-white shadow-sm"
+                      : "text-slate-600 hover:text-slate-900"
+                  }`}
+                >
+                  <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
+                  </svg>
+                  <span>Map View</span>
+                </button>
+              </div>
             </div>
 
-            {/* Property Cards Grid */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {/* Map View Rendering */}
+            {viewMode === "map" ? (
+              <RoomMap rooms={filteredRooms} />
+            ) : (
+              <>
+                {/* Property Cards Grid */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {paginatedRooms.map((room) => {
                 const isFav = isFavorite(room.id);
                 return (
@@ -529,8 +578,10 @@ export default function HomePage() {
                 </div>
               </div>
             )}
-          </div>
+          </>
         )}
+      </div>
+    )}
       </main>
 
       {/* Footer */}
