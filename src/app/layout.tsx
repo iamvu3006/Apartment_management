@@ -14,6 +14,12 @@ export const metadata: Metadata = {
   title: "Da Nang Apartments & Rooms for Rent | Vu Real Estate",
   description:
     "Verified long-term and short-term apartment rentals, studio apartments, and rooms for expats and digital nomads in Da Nang. Real photos & transparent pricing.",
+  icons: {
+    icon: [
+      { url: "/icon.svg", type: "image/svg+xml" },
+    ],
+    apple: "/apple-icon.svg",
+  },
 };
 
 export default function RootLayout({

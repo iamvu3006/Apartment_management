@@ -35,8 +35,8 @@ export default function SavedPage() {
       <header className="bg-slate-900 text-white sticky top-0 z-30 border-b border-slate-800 shadow-md">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2.5 group">
-            <div className="w-9 h-9 rounded-xl bg-sky-500 text-white flex items-center justify-center font-bold text-lg shadow-sm group-hover:bg-sky-400 transition">
-              DN
+            <div className="w-9 h-9 rounded-xl bg-sky-500 text-white flex items-center justify-center text-lg shadow-sm group-hover:bg-sky-400 transition">
+              🏠
             </div>
             <div>
               <span className="font-extrabold text-base tracking-tight text-white block leading-none">
