@@ -190,6 +190,23 @@ export default function HomePage() {
               <span>{currency === "VND" ? "🇻🇳 ₫ VND" : "🇺🇸 $ USD"}</span>
             </button>
 
+            {/* Map View Switcher Button in Header */}
+            <button
+              onClick={() => {
+                setViewMode((prev) => (prev === "map" ? "grid" : "map"));
+                const el = document.getElementById("listings-section");
+                if (el) el.scrollIntoView({ behavior: "smooth" });
+              }}
+              className={`text-xs px-3 py-1.5 rounded-lg border font-semibold transition flex items-center gap-1.5 ${
+                viewMode === "map"
+                  ? "bg-sky-600 text-white border-sky-500 shadow-sm"
+                  : "bg-slate-800 hover:bg-slate-700 text-slate-200 border-slate-700"
+              }`}
+              title="Toggle interactive map view"
+            >
+              <span>{viewMode === "map" ? "📋 Cards" : "🗺️ Map View"}</span>
+            </button>
+
             {/* Saved Favorites Link */}
             <Link
               href="/saved"

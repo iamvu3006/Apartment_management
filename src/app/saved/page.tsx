@@ -6,10 +6,12 @@ import { supabase } from "@/lib/supabase";
 import { Room, STATUS_LABELS, STATUS_COLORS } from "@/types/room";
 import { useApp } from "@/context/AppContext";
 import { CONTACT_CONFIG } from "@/config/contact";
+import RoomMap from "@/components/RoomMap";
 
 export default function SavedPage() {
   const [rooms, setRooms] = useState<Room[]>([]);
   const [loading, setLoading] = useState(true);
+  const [viewMode, setViewMode] = useState<"grid" | "map">("grid");
   const { favorites, toggleFavorite, formatPrice } = useApp();
 
   useEffect(() => {
@@ -84,9 +86,41 @@ export default function SavedPage() {
             </p>
           </div>
 
-          <span className="text-xs font-semibold text-slate-600 bg-white px-3 py-1.5 rounded-xl border border-slate-200 shadow-sm">
-            {savedRooms.length} Saved Item(s)
-          </span>
+          <div className="flex items-center gap-3">
+            {savedRooms.length > 0 && (
+              <div className="flex items-center bg-slate-200/80 p-1 rounded-xl text-xs font-bold shadow-inner">
+                <button
+                  onClick={() => setViewMode("grid")}
+                  className={`px-3 py-1.5 rounded-lg transition flex items-center gap-1.5 ${
+                    viewMode === "grid"
+                      ? "bg-white text-slate-900 shadow-sm"
+                      : "text-slate-600 hover:text-slate-900"
+                  }`}
+                >
+                  <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+                  </svg>
+                  <span>Cards</span>
+                </button>
+                <button
+                  onClick={() => setViewMode("map")}
+                  className={`px-3 py-1.5 rounded-lg transition flex items-center gap-1.5 ${
+                    viewMode === "map"
+                      ? "bg-sky-600 text-white shadow-sm"
+                      : "text-slate-600 hover:text-slate-900"
+                  }`}
+                >
+                  <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
+                  </svg>
+                  <span>Map View</span>
+                </button>
+              </div>
+            )}
+            <span className="text-xs font-semibold text-slate-600 bg-white px-3 py-1.5 rounded-xl border border-slate-200 shadow-sm">
+              {savedRooms.length} Saved Item(s)
+            </span>
+          </div>
         </div>
 
         {loading && (
@@ -117,6 +151,11 @@ export default function SavedPage() {
         )}
 
         {!loading && savedRooms.length > 0 && (
+          viewMode === "map" ? (
+            <div className="space-y-4">
+              <RoomMap rooms={savedRooms} />
+            </div>
+          ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {savedRooms.map((room) => (
               <div
@@ -221,6 +260,7 @@ export default function SavedPage() {
               </div>
             ))}
           </div>
+          )
         )}
       </main>
 
